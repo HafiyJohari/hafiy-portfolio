@@ -64,11 +64,22 @@
           </div>
         </div>
         <div class="rounded-3xl border border-neutral-200 dark:border-neutral-800 p-6">
-<img src="Hafiy Johari 0.5081994_Pattern-01.png"
-     alt="Hafiy Johari — hero graphic"
-     class="aspect-[4/3] w-full h-auto rounded-2xl object-cover"
-     loading="lazy" />
-            <span class="text-neutral-700 dark:text-neutral-300">(Hero image / collage placeholder)</span>
+<div class="rounded-3xl border border-neutral-200 dark:border-neutral-800 p-0 overflow-hidden">
+  <div class="relative aspect-[4/3] w-full">
+    <video
+      class="absolute inset-0 w-full h-full object-cover"
+      autoplay muted loop playsinline
+      poster="assets/hero.jpg"
+    >
+      <source src="assets/hero.webm" type="video/webm">
+      <source src="assets/hero.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="px-6 py-3 text-sm text-neutral-700 dark:text-neutral-300">
+    (Hero video / 4:3)
+  </div>
+</div>
+
           </div>
           <dl class="mt-6 grid grid-cols-3 gap-4 text-center text-sm">
             <div>
