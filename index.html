@@ -48,6 +48,46 @@
   .tbtn{width:34px;height:34px;display:grid;place-items:center;border-radius:999px;border:1px solid var(--line);
     background:rgba(255,255,255,.08);cursor:pointer}
   .tbtn:hover{background:rgba(255,255,255,.16)}
+  /* 3-zone nav bar */
+.navgrid{
+  display:grid;
+  grid-template-columns:auto 1fr auto;
+  align-items:center;
+  gap:10px;
+  max-width:980px;
+  width:100%;
+}
+
+/* Logo block */
+.logo{display:flex; align-items:center; gap:8px; padding:6px 8px; border-radius:10px}
+.logo:hover{background:rgba(255,255,255,.06)}
+.logo img{height:22px; width:auto; display:block; border-radius:4px}
+.logo .brand{font-family:"Press Start 2P", system-ui, sans-serif; font-weight:400; font-size:13px; letter-spacing:.4px}
+
+/* Center links */
+.links{display:flex; justify-content:center; gap:8px}
+.links a{font-size:14px; padding:8px 12px; border-radius:999px; border:1px solid transparent}
+.links a:hover{border-color:var(--line); background:rgba(255,255,255,.06)}
+
+/* Right actions */
+.actions{display:flex; gap:8px}
+.actions .btn{padding:8px 12px; border-radius:12px; border:1px solid var(--line); background:rgba(255,255,255,.10)}
+.actions .btn:hover{background:rgba(255,255,255,.18)}
+
+/* Mobile: stack neatly with links centered */
+@media (max-width: 640px){
+  .nav .bar{padding:8px 10px}
+  .navgrid{grid-template-columns:1fr; row-gap:6px}
+  .logo{justify-content:center}
+  .links{order:2; justify-content:center; flex-wrap:wrap}
+  .actions{order:3; justify-content:center}
+}
+
+/* Extra small: hide brand text to save space */
+@media (max-width: 480px){
+  .logo .brand{display:none}
+}
+
 
   /* HERO */
   .hero{position:relative;height:84vh;min-height:520px;overflow:hidden;display:grid;place-items:center}
@@ -122,26 +162,30 @@
 
 <body>
   <!-- NAV -->
-  <nav class="nav">
-    <div class="shell">
-      <a href="#" class="brand" aria-label="Home">
-        <img src="assets/Hafiy Johari Concept Logo Compilation-01.png" alt="Hafiy logo">
-        <span class="name">Hafiy Johari</span>
-      </a>
+<nav class="nav">
+  <div class="bar navgrid">
+    <!-- Left: logo -->
+    <a class="logo" href="#top" aria-label="Hafiy Johari">
+      <img src="assets/Hafiy Johari Concept Logo Compilation-01.png" alt="Hafiy Johari logo">
+      <span class="brand">Hafiy Johari</span>
+    </a>
 
-      <div class="bar">
-        <a href="#work">Work</a>
-        <a href="#about">About</a>
-        <a href="#contact">Contact</a>
-        <a href="https://www.behance.net/hafiyjohari" target="_blank" rel="noreferrer">Behance ↗</a>
-      </div>
-
-      <div class="actions">
-        <a class="chip" href="#contact">Let’s talk</a>
-        <button id="themeToggle" class="tbtn" aria-label="Toggle theme">☾</button>
-      </div>
+    <!-- Center: links -->
+    <div class="links">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="https://www.behance.net/hafiyjohari" target="_blank" rel="noreferrer">Behance ↗</a>
     </div>
-  </nav>
+
+    <!-- Right: actions -->
+    <div class="actions">
+      <a class="btn" href="mailto:hafiyjohari@gmail.com">Let’s talk</a>
+      <!-- Optional theme button:
+      <button id="theme" class="btn" aria-label="Toggle theme">◐</button> -->
+    </div>
+  </div>
+</nav>
 
   <!-- HERO -->
   <header class="hero">
