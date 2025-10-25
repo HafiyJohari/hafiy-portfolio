@@ -1,336 +1,197 @@
-<!DOCTYPE html>
-<html lang="en" class="dark scroll-smooth">
+<!doctype html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Hafiy Johari — Portfolio</title>
-  <meta name="description" content="Graphic Designer & Illustrator — F&B, branding, packaging, social & events" />
-  <!-- Tailwind via CDN for zero-build simplicity -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    // Tailwind config (optional)
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ["Inter", "ui-sans-serif", "system-ui", "-apple-system", "Segoe UI", "Roboto", "Helvetica Neue", "Arial", "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji"] }
-        }
-      },
-      darkMode: "class",
-    }
-  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    /* Fallback for line clamping */
-    .line-clamp-3 { display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+    :root{
+      --bg:#0b0d10; --fg:#e8ecf1; --muted:#9aa7b5; --card:#11151e; --line:rgba(255,255,255,.1);
+      --hi1:#7dd3fc; --hi2:#a78bfa; --glow:0 10px 30px rgba(0,0,0,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+    a{color:inherit}
+    .wrap{max-width:1100px;margin:0 auto;padding:28px 18px}
+
+    /* NAV */
+    .nav{position:fixed;top:10px;left:0;right:0;z-index:40;display:flex;justify-content:center}
+    .nav .bar{backdrop-filter:blur(8px);background:rgba(10,13,18,.55);border:1px solid var(--line);border-radius:999px;display:flex;gap:8px;padding:6px 10px;box-shadow:var(--glow)}
+    .nav a{font-size:14px;padding:8px 12px;border-radius:999px;border:1px solid transparent;text-decoration:none}
+    .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
+
+    /* HERO */
+    .hero{position:relative;height:84vh;min-height:520px;overflow:hidden;display:grid;place-items:center}
+    .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.52) contrast(1.08) saturate(1.05)}
+    .overlay{position:relative;text-align:center;padding:20px}
+    .title{font-weight:800;letter-spacing:-.02em;line-height:.95;font-size:clamp(42px,8vw,88px);text-shadow:0 0 24px rgba(0,0,0,.55)}
+    .lead{margin:10px auto 0;max-width:820px;color:var(--muted);font-size:clamp(14px,2.2vw,18px)}
+    .cta{display:flex;justify-content:center;gap:10px;margin-top:22px}
+    .btn{display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.12);text-decoration:none}
+    .btn:hover{background:rgba(255,255,255,.2)}
+
+    /* SECTION HEAD */
+    h2{font-size:clamp(22px,4.6vw,34px);margin:0 0 8px}
+    .sub{color:var(--muted);margin:0 0 22px}
+
+    /* GRID */
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+    .card{grid-column:span 12;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--glow);transform:translateZ(0)}
+    @media(min-width:720px){.card{grid-column:span 6}}
+    @media(min-width:1060px){.card{grid-column:span 4}}
+
+    .thumb{position:relative;aspect-ratio:16/10;overflow:hidden}
+    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s ease,filter .7s ease}
+    .pillwrap{position:absolute;left:12px;bottom:12px;display:flex;gap:6px;flex-wrap:wrap}
+    .pill{font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(15,18,28,.7);border:1px solid var(--line)}
+
+    .body{padding:12px 14px}
+    .body h3{margin:2px 0 6px;font-size:16px}
+    .meta{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:12px}
+
+    /* Hover + tilt */
+    .card:hover .thumb img{transform:scale(1.07) rotate(.4deg);filter:contrast(1.05) saturate(1.05)}
+    .card{transition:transform .18s ease, box-shadow .18s ease}
+    .card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.32)}
+
+    /* Reveal on scroll */
+    .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease, transform .6s ease}
+    .reveal.show{opacity:1;transform:none}
+
+    footer{padding:38px 18px;color:var(--muted);text-align:center;border-top:1px solid var(--line);margin-top:40px}
+
+    /* Small helper bubbles */
+    .badge{display:inline-block;margin-left:8px;font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.06)}
   </style>
 </head>
-<body class="min-h-screen bg-neutral-50 text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100">
-  <!-- Header / Nav -->
-  <header class="sticky top-0 z-40 backdrop-blur supports-[backdrop-filter]:bg-white/60 dark:supports-[backdrop-filter]:bg-neutral-900/60 border-b border-neutral-200/70 dark:border-neutral-800">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-<a href="#home" class="font-semibold tracking-tight flex items-center gap-2">
-  <img src="Hafiy Johari Concept Logo Compilation-01.png" alt="Hafiy Johari logo" class="h-6 w-auto" loading="lazy" />
-  <span>Hafiy Johari</span>
-</a>
-      <nav class="hidden md:flex gap-6 text-sm">
-        <a href="#work" class="text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">Work</a>
-        <a href="#experience" class="text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">Experience</a>
-        <a href="#skills" class="text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">Skills</a>
-        <a href="#contact" class="text-neutral-600 hover:text-neutral-900 dark:text-neutral-300 dark:hover:text-white">Contact</a>
-      </nav>
-      <div class="flex items-center gap-2">
-        <a href="#contact" class="hidden sm:inline-flex items-center rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5 text-sm hover:bg-neutral-100 dark:hover:bg-neutral-800">Let’s talk</a>
-        <button id="themeToggle" aria-label="Toggle dark mode" class="rounded-xl border border-neutral-200 dark:border-neutral-800 p-2 hover:bg-neutral-100 dark:hover:bg-neutral-800">☾</button>
+<body>
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="bar">
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="https://www.behance.net/hafiyjohari" target="_blank" rel="noreferrer">Behance ↗</a>
+    </div>
+  </nav>
+
+  <!-- HERO (full-bleed video) -->
+  <header class="hero">
+    <video autoplay muted loop playsinline poster="assets/hero.jpg">
+      <source src="assets/hero.webm" type="video/webm" />
+      <source src="assets/hero.mp4" type="video/mp4" />
+    </video>
+    <div class="overlay">
+      <div class="title">Hafiy Johari</div>
+      <p class="lead">Graphic Designer & Creative Explorer. I build brand systems and tasty F&B visuals that scale across platforms. Hover the wall below for a peek; click for details.</p>
+      <div class="cta">
+        <a class="btn" href="#work">See my work ↓</a>
+        <a class="btn" href="#contact">Hire / collab →</a>
       </div>
     </div>
   </header>
 
-  <main class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-    <!-- Hero -->
-    <section id="home" class="py-16 sm:py-24">
-      <div class="grid md:grid-cols-[1.2fr,0.8fr] items-center gap-10">
-        <div>
-          <p class="uppercase tracking-widest text-xs text-neutral-500 dark:text-neutral-400">Portfolio — 2025</p>
-          <h1 class="mt-3 text-3xl sm:text-5xl font-semibold leading-tight">
-            Graphic Designer & Illustrator
-            <span class="block text-neutral-500 dark:text-neutral-400 text-xl sm:text-2xl mt-3">F&B, branding, packaging, social & events</span>
-          </h1>
-          <p class="mt-6 text-neutral-700 dark:text-neutral-300 max-w-2xl">
-            I shape brand systems and campaign assets you can scale — menus to billboards, thumbnails to booths. Based in Selangor, from Kedah.
-          </p>
-          <div class="mt-8 flex flex-wrap gap-3">
-            <a href="#work" class="px-4 py-2 rounded-xl bg-neutral-900 text-white dark:bg-white dark:text-neutral-900 hover:opacity-90">See work</a>
-            <a href="#contact" class="px-4 py-2 rounded-xl border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800">Contact</a>
-            <a href="https://behance.net/hafiyjohari" target="_blank" rel="noreferrer" class="px-4 py-2 rounded-xl border border-neutral-300 dark:border-neutral-700 hover:bg-neutral-100 dark:hover:bg-neutral-800">Behance</a>
-          </div>
-        </div>
-        <div class="rounded-3xl border border-neutral-200 dark:border-neutral-800 p-6">
-<div class="rounded-3xl border border-neutral-200 dark:border-neutral-800 p-0 overflow-hidden">
-  <div class="relative aspect-[4/3] w-full">
-    <video
-      class="absolute inset-0 w-full h-full object-cover"
-      autoplay muted loop playsinline
-      poster="assets/hero.jpg"
-    >
-      <source src="assets/hero.webm" type="video/webm">
-      <source src="assets/hero.mp4" type="video/mp4">
-    </video>
-  </div>
-  <div class="px-6 py-3 text-sm text-neutral-700 dark:text-neutral-300">
-    (Hero video / 4:3)
-  </div>
-</div>
+  <main class="wrap">
+    <section id="work" class="reveal">
+      <h2>Selected Work <span class="badge" id="count">0</span></h2>
+      <p class="sub">A living wall — easy to add more later inside <code>projects</code> below.</p>
 
-          </div>
-          <dl class="mt-6 grid grid-cols-3 gap-4 text-center text-sm">
-            <div>
-              <dt class="text-neutral-500">Experience</dt>
-              <dd class="font-semibold">10+ yrs</dd>
-            </div>
-            <div>
-              <dt class="text-neutral-500">Industries</dt>
-              <dd class="font-semibold">F&B, Gov, SME</dd>
-            </div>
-            <div>
-              <dt class="text-neutral-500">Awards</dt>
-              <dd class="font-semibold">IIDEX, Mindareka</dd>
-            </div>
-          </dl>
-        </div>
-      </div>
+      <div id="grid" class="grid"></div>
     </section>
 
-    <!-- Work -->
-    <section id="work" class="py-14 sm:py-20">
-      <div class="mb-8 sm:mb-10">
-        <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">Selected Work</h2>
-        <p class="mt-2 text-neutral-600 dark:text-neutral-400">A small cut from a wide table</p>
-      </div>
-      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        <!-- Card template (duplicate & replace content/images) -->
-        <article class="group rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
-<img src="20240807_Random Comp_v1-01.jpg"
-     alt="Budak Butter — packaging"
-     class="aspect-[4/3] w-full object-cover"
-     loading="lazy" />
-          <div class="p-5">
-            <div class="flex items-center justify-between">
-              <h3 class="font-semibold leading-snug group-hover:underline">Budak Butter — Logo & Mascot</h3>
-              <span class="text-xs text-neutral-500">2024</span>
-            </div>
-            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400 line-clamp-3">Logo system and playful mascot for Budak Butter: grid, clear space, and smiley-based iconography.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">Branding</span>
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">Identity</span>
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">Illustration</span>
-            </div>
-            <div class="mt-4">
-              <a href="#" class="text-sm underline underline-offset-4">View details</a>
-            </div>
-          </div>
-        </article>
-        <article class="group rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
-          <div class="aspect-[4/3] bg-neutral-100 dark:bg-neutral-900 grid place-items-center">
-            <span class="text-neutral-500">IHFHEX</span>
-          </div>
-          <div class="p-5">
-            <div class="flex items-center justify-between">
-              <h3 class="font-semibold leading-snug group-hover:underline">IHFHEX 2020 — Campaign Kit</h3>
-              <span class="text-xs text-neutral-500">2020</span>
-            </div>
-            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400 line-clamp-3">Full social pack: covers, posts, stories for multiple F&B brands under International Halal Food & Hospitality Expo.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">Campaign</span>
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">Social</span>
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">Event</span>
-            </div>
-            <div class="mt-4">
-              <a href="#" class="text-sm underline underline-offset-4">View details</a>
-            </div>
-          </div>
-        </article>
-        <article class="group rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
-          <div class="aspect-[4/3] bg-neutral-100 dark:bg-neutral-900 grid place-items-center">
-            <span class="text-neutral-500">Shell SG</span>
-          </div>
-          <div class="p-5">
-            <div class="flex items-center justify-between">
-              <h3 class="font-semibold leading-snug group-hover:underline">Shell Singapore — Handbook</h3>
-              <span class="text-xs text-neutral-500">2018</span>
-            </div>
-            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400 line-clamp-3">Make the Future Singapore handbook — structured information design with friendly, legible typographic system.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">Editorial</span>
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">Layout</span>
-            </div>
-            <div class="mt-4">
-              <a href="#" class="text-sm underline underline-offset-4">View details</a>
-            </div>
-          </div>
-        </article>
-        <article class="group rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
-          <div class="aspect-[4/3] bg-neutral-100 dark:bg-neutral-900 grid place-items-center">
-            <span class="text-neutral-500">MIDA</span>
-          </div>
-          <div class="p-5">
-            <div class="flex items-center justify-between">
-              <h3 class="font-semibold leading-snug group-hover:underline">MIDA — Tunnel Content Design</h3>
-              <span class="text-xs text-neutral-500">2017</span>
-            </div>
-            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400 line-clamp-3">Large-format motion-friendly panels for high-traffic tunnel — crisp hierarchy, bold messaging.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">Exhibit</span>
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">Wayfinding</span>
-            </div>
-            <div class="mt-4">
-              <a href="#" class="text-sm underline underline-offset-4">View details</a>
-            </div>
-          </div>
-        </article>
-        <article class="group rounded-2xl border border-neutral-200 dark:border-neutral-800 overflow-hidden">
-          <div class="aspect-[4/3] bg-neutral-100 dark:bg-neutral-900 grid place-items-center">
-            <span class="text-neutral-500">KRR</span>
-          </div>
-          <div class="p-5">
-            <div class="flex items-center justify-between">
-              <h3 class="font-semibold leading-snug group-hover:underline">KRR — Multi-channel Campaigns</h3>
-              <span class="text-xs text-neutral-500">2020–2025</span>
-            </div>
-            <p class="mt-2 text-sm text-neutral-600 dark:text-neutral-400 line-clamp-3">End-to-end creative across menus, POSM, social, event booths, and packaging for Kenny Rogers ROASTERS Malaysia.</p>
-            <div class="mt-3 flex flex-wrap gap-2">
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">F&amp;B</span>
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">Packaging</span>
-              <span class="text-xs rounded-full px-2 py-1 border border-neutral-200 dark:border-neutral-800">OOH</span>
-            </div>
-            <div class="mt-4">
-              <a href="#" class="text-sm underline underline-offset-4">View details</a>
-            </div>
-          </div>
-        </article>
-      </div>
+    <section id="about" class="reveal" style="margin-top:46px">
+      <h2>About</h2>
+      <p class="sub">Assistant Manager — Graphic Design @ KRR. Based in Selangor, from Kedah. I like clean type, bold color, and systems you can actually ship.</p>
     </section>
 
-    <!-- Experience -->
-    <section id="experience" class="py-14 sm:py-20">
-      <div class="mb-8 sm:mb-10">
-        <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">Experience</h2>
-        <p class="mt-2 text-neutral-600 dark:text-neutral-400">Built by shipping, not talking</p>
-      </div>
-      <ol class="relative border-s border-neutral-200 dark:border-neutral-800 ml-3">
-        <li class="mb-8 ms-4">
-          <div class="absolute w-2 h-2 bg-neutral-400 rounded-full -start-1.5 mt-2"></div>
-          <h3 class="font-semibold">Assistant Manager – Graphic Design</h3>
-          <p class="text-sm text-neutral-600 dark:text-neutral-400">Berjaya Roasters Sdn Bhd (KRR) · 2020 – Present</p>
-          <ul class="mt-2 list-disc ps-5 text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
-            <li>Brand guardianship across digital, print, packaging, and events.</li>
-            <li>Menu systems (physical &amp; digital), POSM, and campaign rollouts.</li>
-            <li>Vendor coordination, production checks, large-format outputs.</li>
-          </ul>
-        </li>
-        <li class="mb-8 ms-4">
-          <div class="absolute w-2 h-2 bg-neutral-400 rounded-full -start-1.5 mt-2"></div>
-          <h3 class="font-semibold">Lecturer (Graphic Design)</h3>
-          <p class="text-sm text-neutral-600 dark:text-neutral-400">MSU College Sungai Petani · 2017 – 2019</p>
-          <ul class="mt-2 list-disc ps-5 text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
-            <li>Taught Adobe suite, design fundamentals, and mentored portfolios.</li>
-          </ul>
-        </li>
-        <li class="mb-8 ms-4">
-          <div class="absolute w-2 h-2 bg-neutral-400 rounded-full -start-1.5 mt-2"></div>
-          <h3 class="font-semibold">Intern – Graphic Designer</h3>
-          <p class="text-sm text-neutral-600 dark:text-neutral-400">FMMEDIA Advertising Agency · 2016</p>
-          <ul class="mt-2 list-disc ps-5 text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
-            <li>Assisted on campaigns for CIMB, Petronas &amp; Invest Selangor.</li>
-          </ul>
-        </li>
-        <li class="mb-8 ms-4">
-          <div class="absolute w-2 h-2 bg-neutral-400 rounded-full -start-1.5 mt-2"></div>
-          <h3 class="font-semibold">Freelance Designer</h3>
-          <p class="text-sm text-neutral-600 dark:text-neutral-400">Self‑employed · 2012 – Present</p>
-          <ul class="mt-2 list-disc ps-5 text-sm text-neutral-700 dark:text-neutral-300 space-y-1">
-            <li>Clients include Shell Singapore, MIDA, SME Bank, MARA, MUIP, and F&amp;B brands.</li>
-          </ul>
-        </li>
-      </ol>
-    </section>
-
-    <!-- Skills -->
-    <section id="skills" class="py-14 sm:py-20">
-      <div class="mb-8 sm:mb-10">
-        <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">Skills</h2>
-        <p class="mt-2 text-neutral-600 dark:text-neutral-400">Tools and terrains I move in</p>
-      </div>
-      <div class="flex flex-wrap gap-2">
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">Branding</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">Packaging</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">Illustration</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">Editorial</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">Social Content</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">Large‑format</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">Photo Editing</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">Photoshop</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">Illustrator</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">InDesign</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">Premiere Pro</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">After Effects</span>
-        <span class="text-sm rounded-xl border border-neutral-200 dark:border-neutral-800 px-3 py-1.5">3ds Max</span>
-      </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="py-14 sm:py-20">
-      <div class="mb-8 sm:mb-10">
-        <h2 class="text-2xl sm:text-3xl font-semibold tracking-tight">Contact</h2>
-        <p class="mt-2 text-neutral-600 dark:text-neutral-400">Open to collaborations &amp; commissions</p>
-      </div>
-
-      <div class="grid md:grid-cols-2 gap-8">
-        <div class="rounded-2xl border border-neutral-200 dark:border-neutral-800 p-6">
-          <h3 class="font-semibold">Let’s build something</h3>
-          <p class="mt-2 text-neutral-700 dark:text-neutral-300">For commissions, collabs, or freelance inquiries, reach out via email or WhatsApp. I usually reply within a day.</p>
-          <div class="mt-4 space-y-2">
-            <a href="mailto:hafiyjohari@gmail.com" class="block underline underline-offset-4">hafiyjohari@gmail.com</a>
-            <a href="tel:+60164622578" class="block underline underline-offset-4">+60 16-462 2578</a>
-          </div>
-          <div class="mt-4 flex gap-3 text-sm">
-            <a href="https://linkedin.com/in/hafiyjohari" target="_blank" rel="noreferrer" class="underline underline-offset-4">LinkedIn</a>
-            <a href="https://behance.net/hafiyjohari" target="_blank" rel="noreferrer" class="underline underline-offset-4">Behance</a>
-            <a href="https://instagram.com/hafiyjohari" target="_blank" rel="noreferrer" class="underline underline-offset-4">Instagram</a>
-          </div>
-        </div>
-        <div class="rounded-2xl border border-neutral-200 dark:border-neutral-800 p-6">
-          <h3 class="font-semibold">Downloads</h3>
-          <p class="mt-2 text-neutral-700 dark:text-neutral-300">One‑page resume and portfolio PDF. Replace the # links with your hosted files when you deploy.</p>
-          <div class="mt-4 grid sm:grid-cols-2 gap-3">
-            <a href="#" class="rounded-xl border border-neutral-200 dark:border-neutral-800 px-4 py-2 text-center hover:bg-neutral-100 dark:hover:bg-neutral-800">Resume (PDF)</a>
-            <a href="#" class="rounded-xl border border-neutral-200 dark:border-neutral-800 px-4 py-2 text-center hover:bg-neutral-100 dark:hover:bg-neutral-800">Portfolio (PDF)</a>
-          </div>
-          <p class="mt-3 text-xs text-neutral-500">Tip: put your PDFs in the same folder and link them like <code>href="resume.pdf"</code>.</p>
-        </div>
-      </div>
+    <section id="contact" class="reveal" style="margin-top:32px">
+      <h2>Contact</h2>
+      <p class="sub">Open to commissions & collabs.</p>
+      <p>
+        <a class="btn" href="mailto:hafiyjohari@gmail.com">hafiyjohari@gmail.com</a>
+        <a class="btn" href="tel:+60164622578">+60 16-462 2578</a>
+      </p>
+      <p class="sub">Downloads: <a href="resume.pdf">Resume (PDF)</a> · <a href="#">Portfolio (PDF)</a></p>
     </section>
   </main>
 
-  <footer class="mt-16 py-10 border-t border-neutral-200 dark:border-neutral-800">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <p class="text-sm text-neutral-600 dark:text-neutral-400">© <span id="year"></span> Hafiy Johari. All rights reserved.</p>
-      <div class="text-sm text-neutral-600 dark:text-neutral-400">Built with ❤️ — single HTML file.</div>
-    </div>
-  </footer>
+  <footer>© <script>document.write(new Date().getFullYear())</script> Hafiy Johari. All rights reserved.</footer>
 
   <script>
-    // Year
-    document.getElementById('year').textContent = new Date().getFullYear();
+    // ===== 1) EDITABLE DATA =====
+    // Easiest path: drop your images into /assets, then add items here.
+    // Fields: title, subtitle, image, tags[], link (internal or external), year
+    const projects = [
+      {
+        title: 'Budak Butter — Logo & Mascot',
+        subtitle: 'Brand grid, clear space, packaging visuals',
+        image: 'Logo Budak Butter_v2-01.jpg',
+        tags: ['Branding','Logo','Illustration'],
+        link: '#',
+        year: 2024
+      },
+      {
+        title: 'IHFHEX 2020 — Campaign Kit',
+        subtitle: 'Posts & stories for F&B brands under IHFHEX',
+        image: 'Hafiy Johari Concept Logo Compilation-01.png',
+        tags: ['Event','Key Visual','Social'],
+        link: '#',
+        year: 2020
+      },
+      {
+        title: 'Shell Singapore — Handbook',
+        subtitle: 'Friendly editorial layout system',
+        image: '20240807_Random Comp_v1-01.jpg',
+        tags: ['Layout','Publication'],
+        link: '#',
+        year: 2018
+      }
+    ];
 
-    // Dark mode toggle with memory
-    const btn = document.getElementById('themeToggle');
-    const applyTheme = (d) => {
-      document.documentElement.classList.toggle('dark', d);
-      btn.textContent = d ? '☾' : '☀';
-      localStorage.setItem('theme-dark', d ? '1' : '0');
-    };
-    const saved = localStorage.getItem('theme-dark');
-    if (saved !== null) applyTheme(saved === '1');
-    btn.addEventListener('click', () => applyTheme(!document.documentElement.classList.contains('dark')));
+    // ===== 2) RENDER CARDS =====
+    const grid = document.getElementById('grid');
+    const count = document.getElementById('count');
+
+    function cardTemplate(p){
+      const src = `assets/${p.image}`;
+      const t = document.createElement('article');
+      t.className='card';
+      t.innerHTML = `
+        <a href="${p.link || '#'}" style="text-decoration:none" ${p.link?.startsWith('http')?'target="_blank" rel="noreferrer"':''}>
+          <div class="thumb">
+            <img src="${src}" alt="${p.title}">
+            <div class="pillwrap">${(p.tags||[]).map(tag=>`<span class='pill'>${tag}</span>`).join('')}</div>
+          </div>
+          <div class="body">
+            <div class="meta"><span>${p.year||''}</span></div>
+            <h3>${p.title}</h3>
+            <div class="sub">${p.subtitle||''}</div>
+          </div>
+        </a>`;
+      // subtle tilt
+      t.addEventListener('mousemove', (e)=>{
+        const r = t.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - .5;
+        const y = (e.clientY - r.top) / r.height - .5;
+        t.style.transform = `rotateX(${ -y*2 }deg) rotateY(${ x*2 }deg) translateY(-2px)`;
+      });
+      t.addEventListener('mouseleave', ()=>{ t.style.transform='translateY(0)'; });
+      return t;
+    }
+
+    projects.forEach(p=> grid.appendChild(cardTemplate(p)));
+    count.textContent = projects.length;
+
+    // ===== 3) Reveal on scroll =====
+    const ro = new IntersectionObserver(entries=>{
+      entries.forEach(el=>{
+        if(el.isIntersecting){ el.target.classList.add('show'); ro.unobserve(el.target); }
+      });
+    }, {threshold:.08});
+    document.querySelectorAll('.reveal').forEach(n=>ro.observe(n));
   </script>
 </body>
 </html>
