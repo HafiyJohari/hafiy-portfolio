@@ -420,118 +420,137 @@
     document.querySelectorAll('.reveal').forEach(n=>ro.observe(n));
 
     /* ---------- 6) MINI-GAME (slow + chill) ---------- */
-    (()=>{
-      const cvs = document.getElementById('cubeGame');
-      if(!cvs) return;
+  <script>
+/* -------- 6) MINI-GAME (ramped pace) ---------- */
+(()=> {
+  const cvs      = document.getElementById('cubeGame');
+  if (!cvs) return;
 
-      const startBtn = document.getElementById('gStart');
-      const scoreEl = document.getElementById('gScore');
-      const timeEl  = document.getElementById('gTime');
-      const ctx = cvs.getContext('2d');
+  const startBtn = document.getElementById('gStart');
+  const scoreEl  = document.getElementById('gScore');
+  const timeEl   = document.getElementById('gTime');
+  const ctx      = cvs.getContext('2d');
 
-      let W=0, H=0, cubes=[], running=false, score=0, tLeft=30, last=0;
-      let spawnClock = 0;
-      const SPAWN_EVERY = 0.9;   // slower spawn
-      const MAX_CUBES   = 9;
+  let W=0, H=0, cubes=[], running=false, score=0, tLeft=30, last=0;
+  let spawnClock = 0;
 
-      function resize(){
-        const r = cvs.getBoundingClientRect();
-        cvs.width  = r.width  * devicePixelRatio;
-        cvs.height = r.height * devicePixelRatio;
-        ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-        W = r.width; H = r.height;
+  // ---- Pace knobs (adjust these) ----
+  const BASE_SPAWN = 0.55;   // was 0.9  -> spawns a bit more often
+  const MAX_CUBES  = 12;     // was 9    -> allow a couple more on screen
+  const SPEED_RAMP = 0.5;    // 0..1 how much speed rises over the 30s round
+
+  function resize(){
+    const r = cvs.getBoundingClientRect();
+    cvs.width  = r.width  * devicePixelRatio;
+    cvs.height = r.height * devicePixelRatio;
+    ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    W = r.width; H = r.height;
+  }
+  new ResizeObserver(resize).observe(cvs);
+
+  function spawn(){
+    const s  = 28 + Math.random()*18;          // 28–46 px (friendly size)
+    const vx = (Math.random()-.5) * 40;         // gentle horizontal drift
+    const vy = - (60 + Math.random()*50);       // -60..-110 px/s upward
+    cubes.push({ x: Math.random()*W, y: H + s, vx, vy, size: s, life: 1 });
+  }
+
+  function tick(dt){
+    // ramp grows from 1.0 -> 1.0+SPEED_RAMP across the round
+    const ramp = 1 + (30 - tLeft)/30 * SPEED_RAMP;
+
+    // spawn cadence speeds up a bit over time
+    spawnClock += dt * ramp;
+    if (spawnClock >= BASE_SPAWN / ramp && cubes.length < MAX_CUBES){
+      spawn();
+      spawnClock = 0;
+    }
+
+    // movement (also scales with ramp)
+    cubes.forEach(c=>{
+      c.x += c.vx * dt * ramp * 0.9;
+      c.y += c.vy * dt * ramp;
+      c.x += Math.sin((c.y + c.size) * 0.02) * (8 * dt * ramp * 0.9); // tiny wiggle
+      if (c.y < -40) c.life = 0;
+    });
+    cubes = cubes.filter(c=>c.life>0);
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    cubes.forEach(c=>{
+      const g = ctx.createLinearGradient(c.x, c.y, c.x+c.size, c.y+c.size);
+      g.addColorStop(0, '#7dd3fc'); g.addColorStop(1, '#a78bfa');
+      ctx.fillStyle = g;
+      ctx.strokeStyle = 'rgba(255,255,255,.25)';
+      ctx.lineWidth = 2;
+
+      ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(0.18); ctx.globalAlpha = 0.95;
+      ctx.fillRect(-c.size/2, -c.size/2, c.size, c.size);
+      ctx.strokeRect(-c.size/2, -c.size/2, c.size, c.size);
+      ctx.restore();
+
+      // soft glow
+      ctx.save(); ctx.globalAlpha = 0.12; ctx.fillStyle = '#7dd3fc';
+      ctx.beginPath(); ctx.arc(c.x, c.y+7, c.size*0.75, 0, Math.PI*2); ctx.fill();
+      ctx.restore();
+    });
+  }
+
+  function loop(ts){
+    if (!running) return;
+    const dt = Math.min(0.05, (ts - (last||ts))/1000); // clamp
+    last = ts;
+    tick(dt);
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  function start(){
+    running = true; score = 0; tLeft = 30; cubes = []; last = 0; spawnClock = 0;
+    scoreEl.textContent = 'Score: 0';
+    timeEl.textContent  = '30s';
+    startBtn.disabled = true;
+
+    const timer = setInterval(()=>{
+      tLeft--; timeEl.textContent = tLeft+'s';
+      if (tLeft<=0){ clearInterval(timer); end(); }
+    }, 1000);
+
+    requestAnimationFrame(loop);
+  }
+
+  function end(){
+    running = false;
+    startBtn.disabled = false;
+    alert('Nice! Final score: ' + score);
+  }
+
+  function getPos(evt){
+    const r = cvs.getBoundingClientRect();
+    const x = (evt.touches?evt.touches[0].clientX:evt.clientX) - r.left;
+    const y = (evt.touches?evt.touches[0].clientY:evt.clientY) - r.top;
+    return {x,y};
+  }
+
+  function hitTest(x,y){
+    // friendly hitbox ~90% of square
+    for (let i=cubes.length-1;i>=0;i--){
+      const c = cubes[i];
+      if (Math.abs(x - c.x) <= c.size*0.9 && Math.abs(y - c.y) <= c.size*0.9){
+        cubes.splice(i,1);
+        score++; scoreEl.textContent = 'Score: ' + score;
+        return true;
       }
-      new ResizeObserver(resize).observe(cvs);
+    }
+    return false;
+  }
 
-      function spawn(){
-        const s  = 32 + Math.random()*16;         // 32–48 px
-        const vx = (Math.random()-.5) * 26;       // gentle drift
-        const vy = - (30 + Math.random()*30);     // -30..-60 px/s upward
-        cubes.push({ x: Math.random()*W, y: H + s, vx, vy, size: s, life: 1 });
-      }
+  cvs.addEventListener('click', e=>{ if(running){ const {x,y}=getPos(e); hitTest(x,y); }});
+  cvs.addEventListener('touchstart', e=>{ if(running){ const {x,y}=getPos(e); hitTest(x,y); }}, {passive:true});
+  startBtn.addEventListener('click', start);
+})();
+</script>
 
-      function tick(dt){
-        spawnClock += dt;
-        if (spawnClock >= SPAWN_EVERY && cubes.length < MAX_CUBES){
-          spawn(); spawnClock = 0;
-        }
-
-        cubes.forEach(c=>{
-          c.x += c.vx * dt;
-          c.y += c.vy * dt;
-          c.x += Math.sin((c.y+c.size)*0.02) * 6 * dt; // tiny wiggle
-          if (c.y < -40) c.life = 0;
-        });
-        cubes = cubes.filter(c=>c.life>0);
-      }
-
-      function draw(){
-        ctx.clearRect(0,0,W,H);
-        cubes.forEach(c=>{
-          const g = ctx.createLinearGradient(c.x, c.y, c.x+c.size, c.y+c.size);
-          g.addColorStop(0, '#7dd3fc'); g.addColorStop(1, '#a78bfa');
-          ctx.fillStyle = g; ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 2;
-
-          ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(0.18); ctx.globalAlpha = 0.95;
-          ctx.fillRect(-c.size/2, -c.size/2, c.size, c.size);
-          ctx.strokeRect(-c.size/2, -c.size/2, c.size, c.size);
-          ctx.restore();
-
-          ctx.save(); ctx.globalAlpha = 0.12; ctx.fillStyle = '#7dd3fc';
-          ctx.beginPath(); ctx.arc(c.x, c.y+7, c.size*0.75, 0, Math.PI*2); ctx.fill();
-          ctx.restore();
-        });
-      }
-
-      function loop(ts){
-        if (!running) return;
-        const dt = (ts - (last||ts)) / 1000;
-        last = ts;
-        tick(Math.min(dt, 0.05));
-        draw();
-        requestAnimationFrame(loop);
-      }
-
-      function start(){
-        running = true; score = 0; tLeft = 30; cubes = []; last = 0; spawnClock = 0;
-        scoreEl.textContent = 'Score: 0'; timeEl.textContent = '30s';
-        startBtn.disabled = true;
-        const timer = setInterval(()=>{
-          tLeft--; timeEl.textContent = tLeft+'s';
-          if (tLeft<=0){ clearInterval(timer); end(); }
-        },1000);
-        requestAnimationFrame(loop);
-      }
-
-      function end(){
-        running = false; startBtn.disabled = false;
-        alert('Nice! Final score: '+score);
-      }
-
-      function getPos(evt){
-        const r = cvs.getBoundingClientRect();
-        const x = (evt.touches?evt.touches[0].clientX:evt.clientX) - r.left;
-        const y = (evt.touches?evt.touches[0].clientY:evt.clientY) - r.top;
-        return {x,y};
-      }
-
-      function hitTest(x,y){
-        for (let i=cubes.length-1;i>=0;i--){
-          const c = cubes[i];
-          if (Math.abs(x - c.x) <= c.size*0.9 && Math.abs(y - c.y) <= c.size*0.9){
-            cubes.splice(i,1);
-            score++; scoreEl.textContent = 'Score: '+score;
-            return true;
-          }
-        }
-        return false;
-      }
-
-      cvs.addEventListener('click', e=>{ if (!running) return; const {x,y}=getPos(e); hitTest(x,y); });
-      cvs.addEventListener('touchstart', e=>{ if (!running) return; const {x,y}=getPos(e); hitTest(x,y); }, {passive:true});
-
-      startBtn.addEventListener('click', start);
-    })();
-  </script>
 </body>
 </html>
