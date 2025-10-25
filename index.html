@@ -388,16 +388,25 @@
       if(e.key==='ArrowLeft')  lbGo(-1);
     });
 
-    // Delegate clicks for any element with data-lightbox
-    document.addEventListener('click', e=>{
-      const el = e.target.closest('[data-lightbox]');
-      if(!el) return;
-      e.preventDefault();
-      const src = el.getAttribute('data-lightbox');
-      const gridImgs = [...document.querySelectorAll('#grid .thumb img')].map(i=>i.src);
-      const list = el.closest('#grid') ? gridImgs : slides;
-      openLB(src, list);
-    });
+   // Delegate clicks for any element with data-lightbox
+document.addEventListener('click', e=>{
+  const el = e.target.closest('[data-lightbox]');
+  if(!el) return;
+  e.preventDefault();
+
+  // Use the same RELATIVE path everywhere
+  const src = el.getAttribute('data-lightbox');
+
+  // Build the gallery list using the same attribute
+  const gridImgs = [...document.querySelectorAll('#grid .thumb img')]
+    .map(i => i.getAttribute('data-lightbox'));
+
+  // If the click happened inside the grid, use grid list; else use slides
+  const list = el.closest('#grid') ? gridImgs : slides;
+
+  openLB(src, list);
+});
+
 
     /* ---------- 5) SCROLL REVEAL ---------- */
     const ro = new IntersectionObserver(entries=>{
