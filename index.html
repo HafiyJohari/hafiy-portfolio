@@ -33,6 +33,31 @@
     .btn{display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.12);text-decoration:none}
     .btn:hover{background:rgba(255,255,255,.2)}
 
+    /* --- Slideshow --- */
+.slider{position:relative;overflow:hidden;border:1px solid var(--line);
+  border-radius:16px;background:var(--card);box-shadow:var(--glow)}
+.track{display:flex;transition:transform .5s ease}
+.slide{min-width:100%;position:relative;aspect-ratio:16/9}
+.slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.ctrl{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.4);
+  border:1px solid var(--line);color:#fff;border-radius:999px;padding:10px 12px;cursor:pointer}
+.ctrl:hover{background:rgba(0,0,0,.6)}
+.ctrl.prev{left:10px} .ctrl.next{right:10px}
+.dots{position:absolute;left:0;right:0;bottom:10px;display:flex;gap:6px;justify-content:center}
+.dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.35);border:1px solid var(--line);cursor:pointer}
+.dot.active{background:#fff}
+
+/* --- Lightbox --- */
+.lb{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.8);z-index:70}
+.lb.show{display:flex}
+.lb img{max-width:92vw;max-height:92vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+.lb .x{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.1);border:1px solid var(--line);
+  color:#fff;border-radius:10px;padding:8px 10px;cursor:pointer}
+.lb .x:hover{background:rgba(255,255,255,.2)}
+.lb .nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 12px}
+.lb .nav button{background:transparent;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.9}
+.lb .nav button:hover{opacity:1}
+
     /* SECTION HEAD */
     h2{font-size:clamp(22px,4.6vw,34px);margin:0 0 8px}
     .sub{color:var(--muted);margin:0 0 22px}
@@ -95,7 +120,19 @@
   </header>
 
   <main class="wrap">
-    <section id="work" class="reveal">
+    <section id="work"<!-- Featured Slideshow -->
+<section class="reveal" style="margin-bottom:24px">
+  <h2>Featured <span class="badge">slideshow</span></h2>
+  <p class="sub">Tap the image to view full size; arrows to browse.</p>
+
+  <div class="slider" id="slider">
+    <div class="track" id="track"></div>
+    <button class="ctrl prev" id="prev">‹</button>
+    <button class="ctrl next" id="next">›</button>
+    <div class="dots" id="dots"></div>
+  </div>
+</section>
+
       <h2>Selected Work <span class="badge" id="count">0</span></h2>
       <p class="sub">A living wall — easy to add more later inside <code>projects</code> below.</p>
 
@@ -193,5 +230,109 @@
     }, {threshold:.08});
     document.querySelectorAll('.reveal').forEach(n=>ro.observe(n));
   </script>
+  <div class="lb" id="lightbox">
+  <button class="x" id="lbClose">Close ✕</button>
+  <div class="nav">
+    <button id="lbPrev">‹</button>
+    <button id="lbNext">›</button>
+  </div>
+  <img id="lbImg" alt="" />
+</div>
 </body>
 </html>
+
+<script>
+// ===== Slideshow data (drop your image filenames in /assets) =====
+const slides = [
+  '20240807_Random Comp_v1-01.jpg',
+  'Hafiy Johari 0.5081994_Pattern-01.png',
+  'Hafiy Johari Concept Logo Compilation-01.png',
+  'Logo Budak Butter_v2-01.jpg'
+].map(name => `assets/${name}`);
+
+// Build slider
+const track = document.getElementById('track');
+const dots  = document.getElementById('dots');
+let idx = 0, timer;
+
+slides.forEach((src, i) => {
+  const s = document.createElement('div');
+  s.className = 'slide';
+  s.innerHTML = `<img src="${src}" alt="slide ${i+1}" data-lightbox="${src}">`;
+  track.appendChild(s);
+
+  const d = document.createElement('button');
+  d.className = 'dot' + (i===0?' active':''); d.addEventListener('click', ()=>go(i));
+  dots.appendChild(d);
+});
+
+function go(i){
+  idx = (i + slides.length) % slides.length;
+  track.style.transform = `translateX(${-idx*100}%)`;
+  [...dots.children].forEach((el,j)=> el.classList.toggle('active', j===idx));
+}
+
+function next(){ go(idx+1); }
+function prev(){ go(idx-1); }
+
+document.getElementById('next').onclick = next;
+document.getElementById('prev').onclick = prev;
+
+function start(){ timer = setInterval(next, 4000); }
+function stop(){ clearInterval(timer); }
+document.getElementById('slider').addEventListener('mouseenter', stop);
+document.getElementById('slider').addEventListener('mouseleave', start);
+start();
+
+// ===== Lightbox for slideshow + grid thumbnails =====
+const lb = document.getElementById('lightbox');
+const lbImg = document.getElementById('lbImg');
+const lbClose = document.getElementById('lbClose');
+const lbPrev = document.getElementById('lbPrev');
+const lbNext = document.getElementById('lbNext');
+
+let lbList = slides.slice(); // default: slideshow images
+let lbIndex = 0;
+
+function openLB(src, list){
+  lbList = list || slides;
+  lbIndex = lbList.indexOf(src);
+  if (lbIndex < 0) lbIndex = 0;
+  lbImg.src = lbList[lbIndex];
+  lb.classList.add('show');
+}
+function closeLB(){ lb.classList.remove('show'); }
+function lbGo(delta){
+  lbIndex = (lbIndex + delta + lbList.length) % lbList.length;
+  lbImg.src = lbList[lbIndex];
+}
+lbClose.onclick = closeLB;
+lb.onclick = (e)=>{ if(e.target === lb) closeLB(); };
+lbPrev.onclick = ()=>lbGo(-1);
+lbNext.onclick = ()=>lbGo(1);
+document.addEventListener('keydown', e=>{
+  if(!lb.classList.contains('show')) return;
+  if(e.key==='Escape') closeLB();
+  if(e.key==='ArrowRight') lbGo(1);
+  if(e.key==='ArrowLeft')  lbGo(-1);
+});
+
+// Delegate clicks for any element with data-lightbox
+document.addEventListener('click', e=>{
+  const el = e.target.closest('[data-lightbox]');
+  if(!el) return;
+  e.preventDefault();
+  const src = el.getAttribute('data-lightbox');
+  openLB(src, lbList);
+});
+
+// Make grid thumbs clickable in lightbox too
+// (Wraps your existing cardTemplate without changing your data)
+const gridObserver = new MutationObserver(()=>{
+  document.querySelectorAll('#grid .thumb img').forEach(img=>{
+    img.setAttribute('data-lightbox', img.src);
+  });
+});
+gridObserver.observe(document.getElementById('grid'), {childList:true, subtree:true});
+</script>
+
