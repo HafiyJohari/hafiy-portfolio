@@ -1,97 +1,93 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Hafiy Johari — Portfolio</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
-  <style>
-    :root{
-      --bg:#0b0d10; --fg:#e8ecf1; --muted:#9aa7b5; --card:#11151e; --line:rgba(255,255,255,.1);
-      --hi1:#7dd3fc; --hi2:#a78bfa; --glow:0 10px 30px rgba(0,0,0,.35);
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-    a{color:inherit}
-    .wrap{max-width:1100px;margin:0 auto;padding:28px 18px}
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Hafiy Johari — Portfolio</title>
 
-    /* NAV */
-    .nav{position:fixed;top:10px;left:0;right:0;z-index:40;display:flex;justify-content:center}
-    .nav .bar{backdrop-filter:blur(8px);background:rgba(10,13,18,.55);border:1px solid var(--line);border-radius:999px;display:flex;gap:8px;padding:6px 10px;box-shadow:var(--glow)}
-    .nav a{font-size:14px;padding:8px 12px;border-radius:999px;border:1px solid transparent;text-decoration:none}
-    .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
-    /* HERO */
-    .hero{position:relative;height:84vh;min-height:520px;overflow:hidden;display:grid;place-items:center}
-    .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.52) contrast(1.08) saturate(1.05)}
-    .overlay{position:relative;text-align:center;padding:20px}
-    .title{font-weight:800;letter-spacing:-.02em;line-height:.95;font-size:clamp(42px,8vw,88px);text-shadow:0 0 24px rgba(0,0,0,.55)}
-    .lead{margin:10px auto 0;max-width:820px;color:var(--muted);font-size:clamp(14px,2.2vw,18px)}
-    .cta{display:flex;justify-content:center;gap:10px;margin-top:22px}
-    .btn{display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.12);text-decoration:none}
-    .btn:hover{background:rgba(255,255,255,.2)}
+<style>
+  :root{
+    --bg:#0b0d10; --fg:#e8ecf1; --muted:#9aa7b5; --card:#11151e; --line:rgba(255,255,255,.1);
+    --hi1:#7dd3fc; --hi2:#a78bfa; --glow:0 10px 30px rgba(0,0,0,.35);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:1100px;margin:0 auto;padding:28px 18px}
 
-    /* --- Slideshow --- */
-.slider{position:relative;overflow:hidden;border:1px solid var(--line);
-  border-radius:16px;background:var(--card);box-shadow:var(--glow)}
-.track{display:flex;transition:transform .5s ease}
-.slide{min-width:100%;position:relative;aspect-ratio:16/9}
-.slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-.ctrl{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.4);
-  border:1px solid var(--line);color:#fff;border-radius:999px;padding:10px 12px;cursor:pointer}
-.ctrl:hover{background:rgba(0,0,0,.6)}
-.ctrl.prev{left:10px} .ctrl.next{right:10px}
-.dots{position:absolute;left:0;right:0;bottom:10px;display:flex;gap:6px;justify-content:center}
-.dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.35);border:1px solid var(--line);cursor:pointer}
-.dot.active{background:#fff}
+  /* NAV */
+  .nav{position:fixed;top:10px;left:0;right:0;z-index:40;display:flex;justify-content:center}
+  .nav .bar{backdrop-filter:blur(8px);background:rgba(10,13,18,.55);border:1px solid var(--line);border-radius:999px;display:flex;gap:8px;padding:6px 10px;box-shadow:var(--glow)}
+  .nav a{font-size:14px;padding:8px 12px;border-radius:999px;border:1px solid transparent}
+  .nav a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
 
-/* --- Lightbox --- */
-.lb{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.8);z-index:70}
-.lb.show{display:flex}
-.lb img{max-width:92vw;max-height:92vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-.lb .x{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.1);border:1px solid var(--line);
-  color:#fff;border-radius:10px;padding:8px 10px;cursor:pointer}
-.lb .x:hover{background:rgba(255,255,255,.2)}
-.lb .nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 12px}
-.lb .nav button{background:transparent;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.9}
-.lb .nav button:hover{opacity:1}
+  /* HERO */
+  .hero{position:relative;height:84vh;min-height:520px;overflow:hidden;display:grid;place-items:center}
+  .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.52) contrast(1.08) saturate(1.05)}
+  .overlay{position:relative;text-align:center;padding:20px}
+  .title{font-weight:800;letter-spacing:-.02em;line-height:.95;font-size:clamp(42px,8vw,88px);text-shadow:0 0 24px rgba(0,0,0,.55)}
+  .lead{margin:10px auto 0;max-width:820px;color:var(--muted);font-size:clamp(14px,2.2vw,18px)}
+  .cta{display:flex;justify-content:center;gap:10px;margin-top:22px}
+  .btn{display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.12)}
+  .btn:hover{background:rgba(255,255,255,.2)}
 
-    /* SECTION HEAD */
-    h2{font-size:clamp(22px,4.6vw,34px);margin:0 0 8px}
-    .sub{color:var(--muted);margin:0 0 22px}
+  /* SECTION HEAD */
+  h2{font-size:clamp(22px,4.6vw,34px);margin:0 0 8px}
+  .sub{color:var(--muted);margin:0 0 22px}
+  .badge{display:inline-block;margin-left:8px;font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.06)}
 
-    /* GRID */
-    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-    .card{grid-column:span 12;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--glow);transform:translateZ(0)}
-    @media(min-width:720px){.card{grid-column:span 6}}
-    @media(min-width:1060px){.card{grid-column:span 4}}
+  /* SLIDESHOW */
+  .slider{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:var(--glow)}
+  .track{display:flex;transition:transform .5s ease}
+  .slide{min-width:100%;position:relative;aspect-ratio:16/9}
+  .slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .ctrl{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.4);
+    border:1px solid var(--line);color:#fff;border-radius:999px;padding:10px 12px;cursor:pointer}
+  .ctrl:hover{background:rgba(0,0,0,.6)}
+  .ctrl.prev{left:10px} .ctrl.next{right:10px}
+  .dots{position:absolute;left:0;right:0;bottom:10px;display:flex;gap:6px;justify-content:center}
+  .dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.35);border:1px solid var(--line);cursor:pointer}
+  .dot.active{background:#fff}
 
-    .thumb{position:relative;aspect-ratio:16/10;overflow:hidden}
-    .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s ease,filter .7s ease}
-    .pillwrap{position:absolute;left:12px;bottom:12px;display:flex;gap:6px;flex-wrap:wrap}
-    .pill{font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(15,18,28,.7);border:1px solid var(--line)}
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
+  .card{grid-column:span 12;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--glow);transform:translateZ(0)}
+  @media(min-width:720px){.card{grid-column:span 6}}
+  @media(min-width:1060px){.card{grid-column:span 4}}
+  .thumb{position:relative;aspect-ratio:16/10;overflow:hidden}
+  .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s ease,filter .7s ease}
+  .pillwrap{position:absolute;left:12px;bottom:12px;display:flex;gap:6px;flex-wrap:wrap}
+  .pill{font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(15,18,28,.7);border:1px solid var(--line)}
+  .body{padding:12px 14px}
+  .body h3{margin:2px 0 6px;font-size:16px}
+  .meta{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:12px}
+  .card{transition:transform .18s ease, box-shadow .18s ease}
+  .card:hover .thumb img{transform:scale(1.07) rotate(.4deg);filter:contrast(1.05) saturate(1.05)}
+  .card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.32)}
 
-    .body{padding:12px 14px}
-    .body h3{margin:2px 0 6px;font-size:16px}
-    .meta{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:12px}
+  /* LIGHTBOX */
+  .lb{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.8);z-index:70}
+  .lb.show{display:flex}
+  .lb img{max-width:92vw;max-height:92vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
+  .lb .x{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.1);border:1px solid var(--line);
+    color:#fff;border-radius:10px;padding:8px 10px;cursor:pointer;z-index:2}
+  .lb .x:hover{background:rgba(255,255,255,.2)}
+  .lb .nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 12px}
+  .lb .nav button{background:transparent;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.9}
+  .lb .nav button:hover{opacity:1}
 
-    /* Hover + tilt */
-    .card:hover .thumb img{transform:scale(1.07) rotate(.4deg);filter:contrast(1.05) saturate(1.05)}
-    .card{transition:transform .18s ease, box-shadow .18s ease}
-    .card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.32)}
+  /* REVEAL */
+  .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease, transform .6s ease}
+  .reveal.show{opacity:1;transform:none}
 
-    /* Reveal on scroll */
-    .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease, transform .6s ease}
-    .reveal.show{opacity:1;transform:none}
-
-    footer{padding:38px 18px;color:var(--muted);text-align:center;border-top:1px solid var(--line);margin-top:40px}
-
-    /* Small helper bubbles */
-    .badge{display:inline-block;margin-left:8px;font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.06)}
-  </style>
+  footer{padding:38px 18px;color:var(--muted);text-align:center;border-top:1px solid var(--line);margin-top:40px}
+</style>
 </head>
+
 <body>
   <!-- NAV -->
   <nav class="nav">
@@ -111,7 +107,7 @@
     </video>
     <div class="overlay">
       <div class="title">Hafiy Johari</div>
-      <p class="lead">Graphic Designer & Creative Explorer. I build brand systems and tasty F&B visuals that scale across platforms. Hover the wall below for a peek; click for details.</p>
+      <p class="lead">Graphic Designer & Creative Explorer. I build brand systems and tasty F&amp;B visuals that scale across platforms. Hover the wall below for a peek; click for details.</p>
       <div class="cta">
         <a class="btn" href="#work">See my work ↓</a>
         <a class="btn" href="#contact">Hire / collab →</a>
@@ -120,23 +116,41 @@
   </header>
 
   <main class="wrap">
-    <section id="work"<!-- Featured Slideshow -->
-<section class="reveal" style="margin-bottom:24px">
-  <h2>Featured <span class="badge">slideshow</span></h2>
-  <p class="sub">Tap the image to view full size; arrows to browse.</p>
+    <!-- Featured Slideshow -->
+    <section class="reveal" style="margin-bottom:24px">
+      <h2>Featured <span class="badge">slideshow</span></h2>
+      <p class="sub">Tap the image to view full size; arrows to browse.</p>
 
-  <div class="slider" id="slider">
-    <div class="track" id="track"></div>
-    <button class="ctrl prev" id="prev">‹</button>
-    <button class="ctrl next" id="next">›</button>
-    <div class="dots" id="dots"></div>
-  </div>
-</section>
+      <div class="slider" id="slider">
+        <div class="track" id="track"></div>
+        <button class="ctrl prev" id="prev" aria-label="Previous">‹</button>
+        <button class="ctrl next" id="next" aria-label="Next">›</button>
+        <div class="dots" id="dots"></div>
+      </div>
+    </section>
 
+    <!-- Work grid -->
+    <section id="work" class="reveal">
       <h2>Selected Work <span class="badge" id="count">0</span></h2>
       <p class="sub">A living wall — easy to add more later inside <code>projects</code> below.</p>
-
       <div id="grid" class="grid"></div>
+    </section>
+
+    <!-- Mini-game -->
+    <section id="game" class="reveal" style="margin-top:48px">
+      <h2>Playful Mode <span class="badge">mini-game</span></h2>
+      <p class="sub">Pop as many cubes as you can in 30 seconds. Click or tap them.</p>
+
+      <div style="position:relative;border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden">
+        <canvas id="cubeGame" style="display:block;width:100%;height:360px"></canvas>
+
+        <!-- HUD -->
+        <div style="position:absolute;left:12px;top:12px;display:flex;gap:10px">
+          <span class="badge" id="gScore">Score: 0</span>
+          <span class="badge" id="gTime">30s</span>
+        </div>
+        <button id="gStart" class="btn" style="position:absolute;right:12px;top:12px">Start</button>
+      </div>
     </section>
 
     <section id="about" class="reveal" style="margin-top:46px">
@@ -157,10 +171,27 @@
 
   <footer>© <script>document.write(new Date().getFullYear())</script> Hafiy Johari. All rights reserved.</footer>
 
+  <!-- Lightbox -->
+  <div class="lb" id="lightbox" aria-hidden="true">
+    <button class="x" id="lbClose">Close ✕</button>
+    <div class="nav" aria-hidden="true">
+      <button id="lbPrev" aria-label="Previous">‹</button>
+      <button id="lbNext" aria-label="Next">›</button>
+    </div>
+    <img id="lbImg" alt="" />
+  </div>
+
+  <!-- ===== DATA + LOGIC ===== -->
   <script>
-    // ===== 1) EDITABLE DATA =====
-    // Easiest path: drop your images into /assets, then add items here.
-    // Fields: title, subtitle, image, tags[], link (internal or external), year
+    // ---------- 1) EDITABLE DATA ----------
+    // Put these image files in /assets (filenames below).
+    const slides = [
+      '20240807_Random Comp_v1-01.jpg',
+      'Hafiy Johari 0.5081994_Pattern-01.png',
+      'Hafiy Johari Concept Logo Compilation-01.png',
+      'Logo Budak Butter_v2-01.jpg'
+    ].map(n => `assets/${n}`);
+
     const projects = [
       {
         title: 'Budak Butter — Logo & Mascot',
@@ -188,7 +219,39 @@
       }
     ];
 
-    // ===== 2) RENDER CARDS =====
+    // ---------- 2) BUILD SLIDESHOW ----------
+    const track = document.getElementById('track');
+    const dots  = document.getElementById('dots');
+    let idx = 0, timer;
+
+    slides.forEach((src, i) => {
+      const s = document.createElement('div');
+      s.className = 'slide';
+      s.innerHTML = `<img src="${src}" alt="Featured ${i+1}" data-lightbox="${src}">`;
+      track.appendChild(s);
+
+      const d = document.createElement('button');
+      d.className = 'dot' + (i===0?' active':'');
+      d.addEventListener('click', ()=>go(i));
+      dots.appendChild(d);
+    });
+
+    function go(i){
+      idx = (i + slides.length) % slides.length;
+      track.style.transform = `translateX(${-idx*100}%)`;
+      [...dots.children].forEach((el,j)=> el.classList.toggle('active', j===idx));
+    }
+    function next(){ go(idx+1); }
+    function prev(){ go(idx-1); }
+    document.getElementById('next').onclick = next;
+    document.getElementById('prev').onclick = prev;
+    function start(){ timer = setInterval(next, 4000); }
+    function stop(){ clearInterval(timer); }
+    document.getElementById('slider').addEventListener('mouseenter', stop);
+    document.getElementById('slider').addEventListener('mouseleave', start);
+    start();
+
+    // ---------- 3) BUILD GRID ----------
     const grid = document.getElementById('grid');
     const count = document.getElementById('count');
 
@@ -197,9 +260,9 @@
       const t = document.createElement('article');
       t.className='card';
       t.innerHTML = `
-        <a href="${p.link || '#'}" style="text-decoration:none" ${p.link?.startsWith('http')?'target="_blank" rel="noreferrer"':''}>
+        <a href="${p.link || '#'}" ${p.link && p.link.startsWith('http')?'target="_blank" rel="noreferrer"':''}>
           <div class="thumb">
-            <img src="${src}" alt="${p.title}">
+            <img src="${src}" alt="${p.title}" data-lightbox="${src}">
             <div class="pillwrap">${(p.tags||[]).map(tag=>`<span class='pill'>${tag}</span>`).join('')}</div>
           </div>
           <div class="body">
@@ -213,126 +276,179 @@
         const r = t.getBoundingClientRect();
         const x = (e.clientX - r.left) / r.width - .5;
         const y = (e.clientY - r.top) / r.height - .5;
-        t.style.transform = `rotateX(${ -y*2 }deg) rotateY(${ x*2 }deg) translateY(-2px)`;
+        t.style.transform = `rotateX(${-y*2}deg) rotateY(${x*2}deg) translateY(-2px)`;
       });
       t.addEventListener('mouseleave', ()=>{ t.style.transform='translateY(0)'; });
       return t;
     }
-
     projects.forEach(p=> grid.appendChild(cardTemplate(p)));
     count.textContent = projects.length;
 
-    // ===== 3) Reveal on scroll =====
+    // ---------- 4) LIGHTBOX ----------
+    const lb = document.getElementById('lightbox');
+    const lbImg = document.getElementById('lbImg');
+    const lbClose = document.getElementById('lbClose');
+    const lbPrev = document.getElementById('lbPrev');
+    const lbNext = document.getElementById('lbNext');
+
+    let lbList = slides.slice(); // default to slideshow images
+    let lbIndex = 0;
+
+    function openLB(src, list){
+      lbList = list || slides;
+      lbIndex = lbList.indexOf(src);
+      if (lbIndex < 0) lbIndex = 0;
+      lbImg.src = lbList[lbIndex];
+      lb.classList.add('show');
+      lb.setAttribute('aria-hidden','false');
+    }
+    function closeLB(){
+      lb.classList.remove('show');
+      lb.setAttribute('aria-hidden','true');
+    }
+    function lbGo(delta){
+      lbIndex = (lbIndex + delta + lbList.length) % lbList.length;
+      lbImg.src = lbList[lbIndex];
+    }
+    lbClose.addEventListener('click', (e)=>{ e.stopPropagation(); closeLB(); });
+    lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLB(); });
+    lbPrev.onclick = ()=>lbGo(-1);
+    lbNext.onclick = ()=>lbGo(1);
+    document.addEventListener('keydown', e=>{
+      if(!lb.classList.contains('show')) return;
+      if(e.key==='Escape') closeLB();
+      if(e.key==='ArrowRight') lbGo(1);
+      if(e.key==='ArrowLeft')  lbGo(-1);
+    });
+
+    // Delegate clicks for any element with data-lightbox
+    document.addEventListener('click', e=>{
+      const el = e.target.closest('[data-lightbox]');
+      if(!el) return;
+      e.preventDefault();
+      const src = el.getAttribute('data-lightbox');
+      // If clicked in grid, build a list of all grid images for left/right nav
+      const gridImgs = [...document.querySelectorAll('#grid .thumb img')].map(i=>i.src);
+      const list = el.closest('#grid') ? gridImgs : slides;
+      openLB(src, list);
+    });
+
+    // ---------- 5) SCROLL REVEAL ----------
     const ro = new IntersectionObserver(entries=>{
       entries.forEach(el=>{
         if(el.isIntersecting){ el.target.classList.add('show'); ro.unobserve(el.target); }
       });
     }, {threshold:.08});
     document.querySelectorAll('.reveal').forEach(n=>ro.observe(n));
+
+    // ---------- 6) MINI-GAME ----------
+    (()=>{
+      const cvs = document.getElementById('cubeGame');
+      if(!cvs) return;
+      const startBtn = document.getElementById('gStart');
+      const scoreEl = document.getElementById('gScore');
+      const timeEl  = document.getElementById('gTime');
+      const ctx = cvs.getContext('2d');
+
+      let W=0, H=0, cubes=[], running=false, score=0, tLeft=30, last=0;
+
+      function resize(){
+        const r = cvs.getBoundingClientRect();
+        cvs.width = r.width * devicePixelRatio;
+        cvs.height = r.height * devicePixelRatio;
+        ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+        W = r.width; H = r.height;
+      }
+      new ResizeObserver(resize).observe(cvs);
+
+      function spawn(){
+        const s = 18 + Math.random()*22;
+        cubes.push({
+          x: Math.random()*W, y: H + s,
+          vx: (Math.random()-.5)*0.6, vy: - (1.2 + Math.random()*1.4),
+          size: s, life: 1
+        });
+      }
+
+      function tick(dt){
+        if (Math.random() < 0.06) spawn();
+        cubes.forEach(c=>{
+          c.x += c.vx*dt; c.y += c.vy*dt;
+          c.x += Math.sin((c.y+c.size)*0.02)*0.2;
+          if (c.y < -30) c.life = 0;
+        });
+        cubes = cubes.filter(c=>c.life>0);
+      }
+
+      function draw(){
+        ctx.clearRect(0,0,W,H);
+        cubes.forEach(c=>{
+          const g = ctx.createLinearGradient(c.x, c.y, c.x+c.size, c.y+c.size);
+          g.addColorStop(0, '#7dd3fc'); g.addColorStop(1, '#a78bfa');
+          ctx.fillStyle = g;
+          ctx.strokeStyle = 'rgba(255,255,255,.25)';
+          ctx.lineWidth = 2;
+          ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(0.2); ctx.globalAlpha = 0.9;
+          ctx.fillRect(-c.size/2, -c.size/2, c.size, c.size);
+          ctx.strokeRect(-c.size/2, -c.size/2, c.size, c.size);
+          ctx.restore();
+          ctx.save(); ctx.globalAlpha = 0.15; ctx.fillStyle = '#7dd3fc';
+          ctx.beginPath(); ctx.arc(c.x, c.y+6, c.size*0.7, 0, Math.PI*2); ctx.fill(); ctx.restore();
+        });
+      }
+
+      function loop(ts){
+        if (!running) return;
+        const dt = Math.min(33, ts - (last||ts)); last = ts;
+        tick(dt); draw(); requestAnimationFrame(loop);
+      }
+
+      function start(){
+        running = true; score = 0; tLeft = 30; cubes = []; last = 0;
+        scoreEl.textContent = 'Score: 0'; timeEl.textContent = '30s';
+        startBtn.disabled = true;
+        const timer = setInterval(()=>{
+          tLeft--; timeEl.textContent = tLeft+'s';
+          if (tLeft<=0){ clearInterval(timer); end(); }
+        },1000);
+        requestAnimationFrame(loop);
+      }
+
+      function end(){
+        running = false; startBtn.disabled = false;
+        alert('Nice! Final score: '+score);
+      }
+
+      function getPos(evt){
+        const r = cvs.getBoundingClientRect();
+        const x = (evt.touches?evt.touches[0].clientX:evt.clientX) - r.left;
+        const y = (evt.touches?evt.touches[0].clientY:evt.clientY) - r.top;
+        return {x,y};
+      }
+
+      function hitTest(x,y){
+        for (let i=cubes.length-1;i>=0;i--){
+          const c = cubes[i];
+          if (Math.abs(x - c.x) < c.size && Math.abs(y - c.y) < c.size){
+            cubes.splice(i,1);
+            score++; scoreEl.textContent = 'Score: '+score;
+            return true;
+          }
+        }
+        return false;
+      }
+
+      cvs.addEventListener('click', e=>{
+        if (!running) return;
+        const {x,y} = getPos(e); hitTest(x,y);
+      });
+      cvs.addEventListener('touchstart', e=>{
+        if (!running) return;
+        const {x,y} = getPos(e); hitTest(x,y);
+      }, {passive:true});
+
+      startBtn.addEventListener('click', start);
+    })();
   </script>
-  <div class="lb" id="lightbox">
-  <button class="x" id="lbClose">Close ✕</button>
-  <div class="nav">
-    <button id="lbPrev">‹</button>
-    <button id="lbNext">›</button>
-  </div>
-  <img id="lbImg" alt="" />
-</div>
 </body>
 </html>
-
-<script>
-// ===== Slideshow data (drop your image filenames in /assets) =====
-const slides = [
-  '20240807_Random Comp_v1-01.jpg',
-  'Hafiy Johari 0.5081994_Pattern-01.png',
-  'Hafiy Johari Concept Logo Compilation-01.png',
-  'Logo Budak Butter_v2-01.jpg'
-].map(name => `assets/${name}`);
-
-// Build slider
-const track = document.getElementById('track');
-const dots  = document.getElementById('dots');
-let idx = 0, timer;
-
-slides.forEach((src, i) => {
-  const s = document.createElement('div');
-  s.className = 'slide';
-  s.innerHTML = `<img src="${src}" alt="slide ${i+1}" data-lightbox="${src}">`;
-  track.appendChild(s);
-
-  const d = document.createElement('button');
-  d.className = 'dot' + (i===0?' active':''); d.addEventListener('click', ()=>go(i));
-  dots.appendChild(d);
-});
-
-function go(i){
-  idx = (i + slides.length) % slides.length;
-  track.style.transform = `translateX(${-idx*100}%)`;
-  [...dots.children].forEach((el,j)=> el.classList.toggle('active', j===idx));
-}
-
-function next(){ go(idx+1); }
-function prev(){ go(idx-1); }
-
-document.getElementById('next').onclick = next;
-document.getElementById('prev').onclick = prev;
-
-function start(){ timer = setInterval(next, 4000); }
-function stop(){ clearInterval(timer); }
-document.getElementById('slider').addEventListener('mouseenter', stop);
-document.getElementById('slider').addEventListener('mouseleave', start);
-start();
-
-// ===== Lightbox for slideshow + grid thumbnails =====
-const lb = document.getElementById('lightbox');
-const lbImg = document.getElementById('lbImg');
-const lbClose = document.getElementById('lbClose');
-const lbPrev = document.getElementById('lbPrev');
-const lbNext = document.getElementById('lbNext');
-
-let lbList = slides.slice(); // default: slideshow images
-let lbIndex = 0;
-
-function openLB(src, list){
-  lbList = list || slides;
-  lbIndex = lbList.indexOf(src);
-  if (lbIndex < 0) lbIndex = 0;
-  lbImg.src = lbList[lbIndex];
-  lb.classList.add('show');
-}
-function closeLB(){ lb.classList.remove('show'); }
-function lbGo(delta){
-  lbIndex = (lbIndex + delta + lbList.length) % lbList.length;
-  lbImg.src = lbList[lbIndex];
-}
-lbClose.onclick = closeLB;
-lb.onclick = (e)=>{ if(e.target === lb) closeLB(); };
-lbPrev.onclick = ()=>lbGo(-1);
-lbNext.onclick = ()=>lbGo(1);
-document.addEventListener('keydown', e=>{
-  if(!lb.classList.contains('show')) return;
-  if(e.key==='Escape') closeLB();
-  if(e.key==='ArrowRight') lbGo(1);
-  if(e.key==='ArrowLeft')  lbGo(-1);
-});
-
-// Delegate clicks for any element with data-lightbox
-document.addEventListener('click', e=>{
-  const el = e.target.closest('[data-lightbox]');
-  if(!el) return;
-  e.preventDefault();
-  const src = el.getAttribute('data-lightbox');
-  openLB(src, lbList);
-});
-
-// Make grid thumbs clickable in lightbox too
-// (Wraps your existing cardTemplate without changing your data)
-const gridObserver = new MutationObserver(()=>{
-  document.querySelectorAll('#grid .thumb img').forEach(img=>{
-    img.setAttribute('data-lightbox', img.src);
-  });
-});
-gridObserver.observe(document.getElementById('grid'), {childList:true, subtree:true});
-</script>
-
