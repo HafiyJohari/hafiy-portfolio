@@ -20,7 +20,7 @@ html[data-theme="dark"]{
   --hi1:#a9f1ff;
 }
 
-/* make the hero video dimmer in dark mode (extra) */
+/* optional: also dim the hero video in dark */
 html[data-theme="dark"] .hero video{
   filter:brightness(.52) contrast(1.08) saturate(1.05);
 }
@@ -229,7 +229,6 @@ h2{
   background:color-mix(in oklab,var(--fg),transparent 90%);
 }
 .iconbtn:hover{ background:color-mix(in oklab,var(--fg),transparent 84%) }
-.iconbtn svg{ width:18px; height:18px; display:block }
 
 /* =========================
    REVEAL
