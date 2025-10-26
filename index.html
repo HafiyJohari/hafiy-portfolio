@@ -72,9 +72,11 @@
   </header>
 
   <main class="wrap">
+    <!-- Featured Slideshow -->
     <section class="reveal" style="margin-bottom:24px">
       <h2>Featured <span class="badge">slideshow</span></h2>
       <p class="sub">Tap the image to view full size; arrows to browse.</p>
+
       <div class="slider" id="slider">
         <div class="track" id="track"></div>
         <button class="ctrl prev" id="prev" aria-label="Previous">‹</button>
@@ -83,21 +85,25 @@
       </div>
     </section>
 
+    <!-- Work grid -->
     <section id="work" class="reveal">
       <h2>Selected Work <span class="badge" id="count">0</span></h2>
       <p class="sub">A living wall — add more any time.</p>
       <div id="grid" class="grid"></div>
     </section>
 
+    <!-- Space mini-game -->
     <section id="game" class="reveal" style="margin-top:48px">
       <h2>MkhkAsg Adventure <span class="badge">space mini-game</span></h2>
       <p class="sub">Flappy-in-space. Click / tap to thrust. Don’t hit the asteroids.</p>
+
       <div class="game-frame">
         <canvas id="spaceGame" width="960" height="540"></canvas>
         <div class="game-overlay" id="gameOverlay"></div>
       </div>
     </section>
 
+    <!-- About -->
     <section id="about" class="reveal" style="margin-top:46px">
       <h2>About</h2>
       <p class="sub" style="max-width:820px">
@@ -105,6 +111,7 @@
       </p>
     </section>
 
+    <!-- Contact -->
     <section id="contact" class="reveal" style="margin-top:32px">
       <h2>Contact</h2>
       <p class="sub">Open to commissions &amp; collabs.</p>
@@ -123,6 +130,7 @@
 
   <footer>© <script>document.write(new Date().getFullYear())</script> Hafiy Johari. All rights reserved.</footer>
 
+  <!-- Lightbox -->
   <div class="lb" id="lightbox" aria-hidden="true">
     <button class="x" id="lbClose">Close ✕</button>
     <div class="nav" aria-hidden="true">
