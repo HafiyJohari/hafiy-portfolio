@@ -1,5 +1,4 @@
 /* THEME TOKENS */
-html[data-theme="light"] .hero video{ filter:brightness(.72) contrast(1.05) saturate(1.05); }
 html[data-theme="dark"] .hero video{ filter:brightness(.52) contrast(1.08) saturate(1.05); }
 
 
