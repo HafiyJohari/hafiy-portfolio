@@ -1,148 +1,19 @@
 <!doctype html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Hafiy Johari — Portfolio</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hafiy Johari — Portfolio</title>
 
-<!-- Fonts: Inter (body) + Press Start 2P (titles only) -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
 
-<style>
-  :root{
-    --bg:#0b0d10; --fg:#e8ecf1; --muted:#9aa7b5; --card:#11151e; --line:rgba(255,255,255,.1);
-    --hi1:#7dd3fc; --hi2:#a78bfa; --glow:0 10px 30px rgba(0,0,0,.35);
-  }
-
-  *{box-sizing:border-box}
-  html,body{margin:0;height:100%;background:var(--bg);color:var(--fg);font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif}
-  a{color:inherit;text-decoration:none}
-  .wrap{max-width:1100px;margin:0 auto;padding:28px 18px}
-
-  /* ---------------- NAV (3-zone grid) ---------------- */
-  .nav{position:fixed;top:10px;left:0;right:0;z-index:40;display:flex;justify-content:center}
-  .nav .bar{
-    backdrop-filter:blur(8px);
-    background:rgba(10,13,18,.55);
-    border:1px solid var(--line);
-    border-radius:999px;
-    box-shadow:var(--glow);
-    padding:8px 10px;
-    width:min(100%,1100px);
-  }
-  .navgrid{
-    display:grid;
-    grid-template-columns:auto 1fr auto;
-    align-items:center;
-    gap:10px;
-  }
-
-  /* Left: logo + name */
-  .logo{display:flex;align-items:center;gap:8px;padding:6px 8px;border-radius:10px}
-  .logo:hover{background:rgba(255,255,255,.06)}
-  .logo img{height:22px;width:auto;border-radius:4px;display:block}
-  .logo .brand{font:400 13px "Press Start 2P",system-ui,sans-serif;letter-spacing:.4px}
-
-  /* Center: links */
-  .links{display:flex;justify-content:center;gap:8px}
-  .links a{font-size:14px;padding:8px 12px;border-radius:999px;border:1px solid transparent}
-  .links a:hover{border-color:var(--line);background:rgba(255,255,255,.06)}
-
-  /* Right: actions */
-  .actions{display:flex;gap:8px}
-  .actions .btn{padding:8px 12px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.10)}
-  .actions .btn:hover{background:rgba(255,255,255,.18)}
-
-  /* Mobile: stack neatly with centered links.
-     Hide Behance + Let’s talk to keep it clean. */
-  @media (max-width: 640px){
-    .navgrid{grid-template-columns:1fr;row-gap:6px}
-    .logo{justify-content:center}
-    .links{order:2;justify-content:center;flex-wrap:wrap}
-    .actions{order:3;justify-content:center}
-    .links a[href*="behance"]{display:none}
-    .actions .btn{display:none}
-  }
-  /* Extra small: hide name text to save space, keep icon */
-  @media (max-width: 480px){ .logo .brand{display:none} }
-
-  /* ---------------- HERO ---------------- */
-  .hero{position:relative;height:84vh;min-height:520px;overflow:hidden;display:grid;place-items:center}
-  .hero video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.52) contrast(1.08) saturate(1.05)}
-  .overlay{position:relative;text-align:center;padding:20px}
-  .title{
-    font-family:"Press Start 2P",system-ui,sans-serif;
-    font-weight:400;letter-spacing:.5px;line-height:1.1;
-    font-size:clamp(28px,7vw,64px);
-    text-shadow:0 0 24px rgba(0,0,0,.35)
-  }
-  .lead{margin:12px auto 0;max-width:820px;color:var(--muted);font-size:clamp(14px,2.2vw,18px)}
-  .cta{display:flex;justify-content:center;gap:10px;margin-top:22px}
-  .btn{display:inline-block;padding:12px 18px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.12)}
-  .btn:hover{background:rgba(255,255,255,.2)}
-
-  /* SECTION HEAD */
-  h2{font-size:clamp(18px,4.6vw,28px);margin:0 0 8px;font-family:"Press Start 2P",system-ui,sans-serif;letter-spacing:.5px}
-  .sub{color:var(--muted);margin:0 0 22px}
-  .badge{display:inline-block;margin-left:8px;font-size:12px;padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.06)}
-
-  /* SLIDESHOW */
-  .slider{position:relative;overflow:hidden;border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:var(--glow)}
-  .track{display:flex;transition:transform .5s ease}
-  .slide{min-width:100%;position:relative;aspect-ratio:16/9}
-  .slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
-  .ctrl{position:absolute;top:50%;transform:translateY(-50%);background:rgba(0,0,0,.4);
-    border:1px solid var(--line);color:#fff;border-radius:999px;padding:10px 12px;cursor:pointer}
-  .ctrl:hover{background:rgba(0,0,0,.6)}
-  .ctrl.prev{left:10px} .ctrl.next{right:10px}
-  .dots{position:absolute;left:0;right:0;bottom:10px;display:flex;gap:6px;justify-content:center}
-  .dot{width:8px;height:8px;border-radius:999px;background:rgba(255,255,255,.35);border:1px solid var(--line);cursor:pointer}
-  .dot.active{background:#fff}
-
-  /* GRID */
-  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:16px}
-  .card{grid-column:span 12;background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--glow);transform:translateZ(0)}
-  @media(min-width:720px){.card{grid-column:span 6}}
-  @media(min-width:1060px){.card{grid-column:span 4}}
-  .thumb{position:relative;aspect-ratio:16/10;overflow:hidden}
-  .thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .7s ease,filter .7s ease}
-  .pillwrap{position:absolute;left:12px;bottom:12px;display:flex;gap:6px;flex-wrap:wrap}
-  .pill{font-size:12px;padding:6px 10px;border-radius:999px;background:rgba(15,18,28,.7);border:1px solid var(--line)}
-  .body{padding:12px 14px}
-  .body h3{margin:2px 0 6px;font-size:16px}
-  .meta{display:flex;gap:8px;align-items:center;color:var(--muted);font-size:12px}
-  .card{transition:transform .18s ease, box-shadow .18s ease}
-  .card:hover .thumb img{transform:scale(1.07) rotate(.4deg);filter:contrast(1.05) saturate(1.05)}
-  .card:hover{transform:translateY(-2px);box-shadow:0 18px 40px rgba(0,0,0,.32)}
-
-  /* LIGHTBOX */
-  .lb{position:fixed;inset:0;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.8);z-index:70}
-  .lb.show{display:flex}
-  .lb img{max-width:92vw;max-height:92vh;border-radius:8px;box-shadow:0 20px 60px rgba(0,0,0,.6)}
-  .lb .x{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.1);border:1px solid var(--line);
-    color:#fff;border-radius:10px;padding:8px 10px;cursor:pointer;z-index:3}
-  .lb .x:hover{background:rgba(255,255,255,.2)}
-  .lb .nav{position:absolute;inset:0;display:flex;align-items:center;justify-content:space-between;padding:0 12px;pointer-events:none}
-  .lb .nav button{pointer-events:auto;background:transparent;border:none;color:#fff;font-size:28px;cursor:pointer;opacity:.9}
-  .lb .nav button:hover{opacity:1}
-
-  /* CONTACT ICONS */
-  .iconbar{display:flex;flex-wrap:wrap;gap:10px;margin-top:8px}
-  .iconbtn{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.08)}
-  .iconbtn:hover{background:rgba(255,255,255,.16)}
-  .iconbtn svg{width:18px;height:18px;display:block}
-
-  /* REVEAL */
-  .reveal{opacity:0;transform:translateY(10px);transition:opacity .6s ease, transform .6s ease}
-  .reveal.show{opacity:1;transform:none}
-
-  footer{padding:38px 18px;color:var(--muted);text-align:center;border-top:1px solid var(--line);margin-top:40px}
-</style>
+  <!-- Styles -->
+  <link rel="stylesheet" href="css/styles.css">
 </head>
-
-<body>
+<body data-theme="dark">
   <!-- NAV -->
   <nav class="nav">
     <div class="bar navgrid">
@@ -162,6 +33,7 @@
 
       <!-- Right: actions -->
       <div class="actions">
+        <button id="themeToggle" class="btn" aria-label="Toggle color theme"></button>
         <a class="btn" href="mailto:hafiyjohari@gmail.com">Let’s talk</a>
       </div>
     </div>
@@ -204,20 +76,19 @@
       <div id="grid" class="grid"></div>
     </section>
 
-    <!-- Mini-game -->
+    <!-- Space mini-game -->
     <section id="game" class="reveal" style="margin-top:48px">
-      <h2>Playful Mode <span class="badge">mini-game</span></h2>
-      <p class="sub">Pop as many cubes as you can in 30 seconds. Click or tap them.</p>
+      <h2>MkhkAsg Adventure <span class="badge">space mini-game</span></h2>
+      <p class="sub">Flappy-in-space. Click / tap to thrust. Don’t hit the asteroids.</p>
 
-      <div style="position:relative;border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden">
-        <canvas id="cubeGame" style="display:block;width:100%;height:360px"></canvas>
-
-        <!-- HUD -->
-        <div style="position:absolute;left:12px;top:12px;display:flex;gap:10px">
-          <span class="badge" id="gScore">Score: 0</span>
-          <span class="badge" id="gTime">30s</span>
+      <div class="game-frame">
+        <canvas id="spaceGame" width="960" height="540"></canvas>
+        <div class="game-overlay" id="gameOverlay">
+          <div class="cover">
+            <div class="cover-title">MkhkAsg Adventure</div>
+            <div class="cover-sub">Press / Tap to Start</div>
+          </div>
         </div>
-        <button id="gStart" class="btn" style="position:absolute;right:12px;top:12px">Start</button>
       </div>
     </section>
 
@@ -271,252 +142,8 @@
     <img id="lbImg" alt="" />
   </div>
 
-  <!-- ===== DATA + LOGIC ===== -->
-  <script>
-    /* ---------- 1) EDITABLE DATA ---------- */
-    const slides = [
-      '20240807_Random Comp_v1-01.jpg',
-      'Hafiy Johari 0.5081994_Pattern-01.png',
-      'Hafiy Johari 0.5081994_PatternOnly-01.png',
-      'Logo Budak Butter_v2-01.jpg'
-    ].map(n => `assets/${n}`);
-
-    const projects = [
-      { title:'Budak Butter — Logo & Mascot', subtitle:'Brand grid, clear space, packaging visuals', image:'Logo Budak Butter_v2-01.jpg', tags:['Branding','Logo','Illustration'], link:'#', year:2024 },
-      { title:'IHFHEX 2020 — Campaign Kit', subtitle:'Posts & stories for F&B brands under IHFHEX', image:'Hafiy Johari Concept Logo Compilation-01.png', tags:['Event','Key Visual','Social'], link:'#', year:2020 },
-      { title:'Shell Singapore — Handbook', subtitle:'Friendly editorial layout system', image:'20240807_Random Comp_v1-01.jpg', tags:['Layout','Publication'], link:'#', year:2018 }
-    ];
-
-    /* ---------- 2) BUILD SLIDESHOW ---------- */
-    const track = document.getElementById('track');
-    const dots  = document.getElementById('dots');
-    let idx = 0, timer;
-
-    slides.forEach((src, i) => {
-      const s = document.createElement('div');
-      s.className = 'slide';
-      s.innerHTML = `<img src="${src}" alt="Featured ${i+1}" data-lightbox="${src}">`;
-      track.appendChild(s);
-
-      const d = document.createElement('button');
-      d.className = 'dot' + (i===0?' active':'');
-      d.addEventListener('click', ()=>go(i));
-      dots.appendChild(d);
-    });
-
-    function go(i){
-      idx = (i + slides.length) % slides.length;
-      track.style.transform = `translateX(${-idx*100}%)`;
-      [...dots.children].forEach((el,j)=> el.classList.toggle('active', j===idx));
-    }
-    function next(){ go(idx+1); }
-    function prev(){ go(idx-1); }
-    document.getElementById('next').onclick = next;
-    document.getElementById('prev').onclick = prev;
-    function start(){ timer = setInterval(next, 4000); }
-    function stop(){ clearInterval(timer); }
-    document.getElementById('slider').addEventListener('mouseenter', stop);
-    document.getElementById('slider').addEventListener('mouseleave', start);
-    start();
-
-    /* ---------- 3) BUILD GRID ---------- */
-    const grid = document.getElementById('grid');
-    const count = document.getElementById('count');
-
-    function cardTemplate(p){
-      const src = `assets/${p.image}`;
-      const t = document.createElement('article');
-      t.className='card';
-      t.innerHTML = `
-        <a href="${p.link || '#'}">
-          <div class="thumb">
-            <img src="${src}" alt="${p.title}" data-lightbox="${src}">
-            <div class="pillwrap">${(p.tags||[]).map(tag=>`<span class='pill'>${tag}</span>`).join('')}</div>
-          </div>
-          <div class="body">
-            <div class="meta"><span>${p.year||''}</span></div>
-            <h3>${p.title}</h3>
-            <div class="sub">${p.subtitle||''}</div>
-          </div>
-        </a>`;
-      t.addEventListener('mousemove', (e)=>{
-        const r = t.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - .5;
-        const y = (e.clientY - r.top) / r.height - .5;
-        t.style.transform = `rotateX(${-y*2}deg) rotateY(${x*2}deg) translateY(-2px)`;
-      });
-      t.addEventListener('mouseleave', ()=>{ t.style.transform='translateY(0)'; });
-      return t;
-    }
-    projects.forEach(p=> grid.appendChild(cardTemplate(p)));
-    count.textContent = projects.length;
-
-    /* ---------- 4) LIGHTBOX ---------- */
-    const lb = document.getElementById('lightbox');
-    const lbImg = document.getElementById('lbImg');
-    const lbClose = document.getElementById('lbClose');
-    const lbPrev = document.getElementById('lbPrev');
-    const lbNext = document.getElementById('lbNext');
-
-    let lbList = slides.slice();
-    let lbIndex = 0;
-
-    function openLB(src, list){
-      lbList = list || slides;
-      lbIndex = lbList.indexOf(src);
-      if (lbIndex < 0) lbIndex = 0;
-      lbImg.src = lbList[lbIndex];
-      lb.classList.add('show');
-      lb.setAttribute('aria-hidden','false');
-    }
-    function closeLB(){
-      lb.classList.remove('show');
-      lb.setAttribute('aria-hidden','true');
-    }
-    function lbGo(delta){
-      lbIndex = (lbIndex + delta + lbList.length) % lbList.length;
-      lbImg.src = lbList[lbIndex];
-    }
-    lbClose.addEventListener('click', (e)=>{ e.stopPropagation(); closeLB(); });
-    lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLB(); });
-    lbPrev.onclick = ()=>lbGo(-1);
-    lbNext.onclick = ()=>lbGo(1);
-    document.addEventListener('keydown', e=>{
-      if(!lb.classList.contains('show')) return;
-      if(e.key==='Escape') closeLB();
-      if(e.key==='ArrowRight') lbGo(1);
-      if(e.key==='ArrowLeft')  lbGo(-1);
-    });
-
-   // Delegate clicks for any element with data-lightbox
-document.addEventListener('click', e=>{
-  const el = e.target.closest('[data-lightbox]');
-  if(!el) return;
-  e.preventDefault();
-
-  // Use the same RELATIVE path everywhere
-  const src = el.getAttribute('data-lightbox');
-
-  // Build the gallery list using the same attribute
-  const gridImgs = [...document.querySelectorAll('#grid .thumb img')]
-    .map(i => i.getAttribute('data-lightbox'));
-
-  // If the click happened inside the grid, use grid list; else use slides
-  const list = el.closest('#grid') ? gridImgs : slides;
-
-  openLB(src, list);
-});
-
-
-    /* ---------- 5) SCROLL REVEAL ---------- */
-    const ro = new IntersectionObserver(entries=>{
-      entries.forEach(el=>{
-        if(el.isIntersecting){ el.target.classList.add('show'); ro.unobserve(el.target); }
-      });
-    }, {threshold:.08});
-    document.querySelectorAll('.reveal').forEach(n=>ro.observe(n));
-
-    /* ---------- 6) MINI-GAME (ramped pace) ---------- */
-    (()=> {
-      const cvs = document.getElementById('cubeGame'); if (!cvs) return;
-      const startBtn = document.getElementById('gStart');
-      const scoreEl  = document.getElementById('gScore');
-      const timeEl   = document.getElementById('gTime');
-      const ctx      = cvs.getContext('2d');
-
-      let W=0, H=0, cubes=[], running=false, score=0, tLeft=30, last=0, spawnClock=0;
-
-      /* Tweak here if you want:
-         - BASE_SPAWN smaller = more frequent spawns
-         - MAX_CUBES higher = more on screen
-         - SPEED_RAMP higher = speeds up more by the end
-      */
-      const BASE_SPAWN = 0.55;
-      const MAX_CUBES  = 12;
-      const SPEED_RAMP = 0.9;
-
-      function resize(){
-        const r = cvs.getBoundingClientRect();
-        cvs.width  = r.width  * devicePixelRatio;
-        cvs.height = r.height * devicePixelRatio;
-        ctx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
-        W = r.width; H = r.height;
-      }
-      new ResizeObserver(resize).observe(cvs);
-
-      function spawn(){
-        const s  = 28 + Math.random()*18;
-        const vx = (Math.random()-.5) * 40;
-        const vy = - (60 + Math.random()*50);
-        cubes.push({ x: Math.random()*W, y: H + s, vx, vy, size: s, life: 1 });
-      }
-
-      function tick(dt){
-        const ramp = 1 + (30 - tLeft)/30 * SPEED_RAMP;
-        spawnClock += dt * ramp;
-        if (spawnClock >= BASE_SPAWN / ramp && cubes.length < MAX_CUBES){
-          spawn(); spawnClock = 0;
-        }
-        cubes.forEach(c=>{
-          c.x += c.vx * dt * ramp * 0.9;
-          c.y += c.vy * dt * ramp;
-          c.x += Math.sin((c.y+c.size)*0.02) * (8 * dt * ramp * 0.9);
-          if (c.y < -40) c.life = 0;
-        });
-        cubes = cubes.filter(c=>c.life>0);
-      }
-
-      function draw(){
-        ctx.clearRect(0,0,W,H);
-        cubes.forEach(c=>{
-          const g = ctx.createLinearGradient(c.x, c.y, c.x+c.size, c.y+c.size);
-          g.addColorStop(0, '#7dd3fc'); g.addColorStop(1, '#a78bfa');
-          ctx.fillStyle = g; ctx.strokeStyle = 'rgba(255,255,255,.25)'; ctx.lineWidth = 2;
-          ctx.save(); ctx.translate(c.x, c.y); ctx.rotate(0.18); ctx.globalAlpha = .95;
-          ctx.fillRect(-c.size/2, -c.size/2, c.size, c.size);
-          ctx.strokeRect(-c.size/2, -c.size/2, c.size, c.size);
-          ctx.restore();
-          ctx.save(); ctx.globalAlpha = .12; ctx.fillStyle = '#7dd3fc';
-          ctx.beginPath(); ctx.arc(c.x, c.y+7, c.size*.75, 0, Math.PI*2); ctx.fill();
-          ctx.restore();
-        });
-      }
-
-      function loop(ts){
-        if (!running) return;
-        const dt = Math.min(0.05, (ts - (last||ts))/1000);
-        last = ts; tick(dt); draw();
-        requestAnimationFrame(loop);
-      }
-
-      function start(){
-        running = true; score = 0; tLeft = 30; cubes = []; last = 0; spawnClock = 0;
-        scoreEl.textContent = 'Score: 0'; timeEl.textContent = '30s';
-        startBtn.disabled = true;
-        const timer = setInterval(()=>{ tLeft--; timeEl.textContent = tLeft+'s'; if (tLeft<=0){ clearInterval(timer); end(); } }, 1000);
-        requestAnimationFrame(loop);
-      }
-      function end(){ running = false; startBtn.disabled = false; alert('Nice! Final score: '+score); }
-
-      function getPos(evt){
-        const r = cvs.getBoundingClientRect();
-        const x = (evt.touches?evt.touches[0].clientX:evt.clientX) - r.left;
-        const y = (evt.touches?evt.touches[0].clientY:evt.clientY) - r.top;
-        return {x,y};
-      }
-      function hitTest(x,y){
-        for (let i=cubes.length-1;i>=0;i--){
-          const c = cubes[i];
-          if (Math.abs(x - c.x) <= c.size*0.9 && Math.abs(y - c.y) <= c.size*0.9){
-            cubes.splice(i,1); score++; scoreEl.textContent = 'Score: '+score; return true;
-          }
-        }
-        return false;
-      }
-      cvs.addEventListener('click', e=>{ if(running){ const {x,y}=getPos(e); hitTest(x,y); }});
-      cvs.addEventListener('touchstart', e=>{ if(running){ const {x,y}=getPos(e); hitTest(x,y); }}, {passive:true});
-      startBtn.addEventListener('click', start);
-    })();
-  </script>
+  <!-- Scripts -->
+  <script src="js/main.js"></script>
+  <script src="js/game.js"></script>
 </body>
 </html>
