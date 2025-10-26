@@ -1,107 +1,52 @@
-/* ---------- DATA ---------- */
-const slides = [
-'Logo Budak Butter_v2-01.jpg',
-'Hafiy Johari 0.5081994_PatternOnly-01.png',
-'Hafiy Johari Concept Logo Compilation-01.png',
-'20240807_Random Comp_v1-01.jpg'
-].map(n => `assets/${n}`);
+(() => {
+const cvs = document.getElementById('spaceGame');
+if (!cvs) return;
+const ctx = cvs.getContext('2d');
+const overlay = document.getElementById('gameOverlay');
 
 
-const projects = [
-{ title:'Budak Butter — Packaging', subtitle:'Logo options and pack mockups', image:'Logo Budak Butter_v2-01.jpg', tags:['Branding','Packaging'], link:'#', year:2024 },
-{ title:'Personal Pattern', subtitle:'Vector repeat — skull gas mask', image:'Hafiy Johari 0.5081994_PatternOnly-01.png', tags:['Pattern','Illustration'], link:'#', year:2023 },
-{ title:'Logo Compilation', subtitle:'Marks & symbols exploration', image:'Hafiy Johari Concept Logo Compilation-01.png', tags:['Identity'], link:'#', year:2022 }
-];
+// World constants
+const G = 0.35, THRUST = -6, GAP = 130, SPEED = 2.2, STAR_COUNT = 120;
+let running = false, started = false, score = 0, best = +localStorage.getItem('mk_best')||0;
+const ship = { x: 240, y: 270, vy: 0, w: 28, h: 18 };
+const pipes = [];
+const stars = Array.from({length:STAR_COUNT}, () => ({ x: Math.random()*960, y: Math.random()*540, s: 1+Math.floor(Math.random()*2) }));
 
 
-/* ---------- SLIDESHOW ---------- */
-const track = document.getElementById('track');
-const dots = document.getElementById('dots');
-let idx = 0, timer;
-slides.forEach((src, i) => {
-const s = document.createElement('div');
-s.className = 'slide';
-s.innerHTML = `<img src="${src}" alt="Featured ${i+1}" data-lightbox="${src}">`;
-track.appendChild(s);
-const d = document.createElement('button');
-d.className = 'dot' + (i===0?' active':'');
-d.addEventListener('click', ()=>go(i));
-dots.appendChild(d);
-});
-function go(i){ idx = (i + slides.length) % slides.length; track.style.transform = `translateX(${-idx*100}%)`; [...dots.children].forEach((el,j)=> el.classList.toggle('active', j===idx)); }
-function next(){ go(idx+1); }
-function prev(){ go(idx-1); }
-document.getElementById('next').onclick = next;
-document.getElementById('prev').onclick = prev;
-function start(){ timer = setInterval(next, 4000); }
-function stop(){ clearInterval(timer); }
-document.getElementById('slider').addEventListener('mouseenter', stop);
-document.getElementById('slider').addEventListener('mouseleave', start);
-start();
+function reset(){ ship.y = 270; ship.vy = 0; pipes.length = 0; score = 0; spawnPipe(1000); cover('MkhkAsg Adventure','Press / Tap to Start'); }
+function spawnPipe(startX = 960){ const top = 60 + Math.random()* (540 - 120 - GAP); pipes.push({ x: startX, top: Math.floor(top) }); }
 
 
-/* ---------- GRID ---------- */
-const grid = document.getElementById('grid');
-const count = document.getElementById('count');
-function cardTemplate(p){
-const src = `assets/${p.image}`;
-const t = document.createElement('article');
-t.className='card';
-t.innerHTML = `
-<a href="${p.link || '#'}">
-<div class="thumb">
-<img src="${src}" alt="${p.title}" data-lightbox="${src}">
-<div class="pillwrap">${(p.tags||[]).map(tag=>`<span class='pill'>${tag}</span>`).join('')}</div>
-</div>
-<div class="body">
-<div class="meta"><span>${p.year||''}</span></div>
-<h3>${p.title}</h3>
-<div class="sub">${p.subtitle||''}</div>
-</div>
-</a>`;
-t.addEventListener('mousemove', (e)=>{
-const r = t.getBoundingClientRect();
-const x = (e.clientX - r.left) / r.width - .5;
-const y = (e.clientY - r.top) / r.height - .5;
-t.style.transform = `rotateX(${-y*2}deg) rotateY(${x*2}deg) translateY(-2px)`;
-});
-t.addEventListener('mouseleave', ()=>{ t.style.transform='translateY(0)'; });
-return t;
+function tap(){ if(!started){ started = true; running = true; overlay.style.display='none'; pipes.length=0; score=0; ship.y=270; ship.vy=0; spawnPipe(1000); return; } if(!running) return; ship.vy = THRUST; }
+
+
+cvs.addEventListener('mousedown', tap);
+cvs.addEventListener('touchstart', e=>{ e.preventDefault(); tap(); }, {passive:false});
+window.addEventListener('keydown', e=>{ if(e.code==='Space' || e.code==='ArrowUp') tap(); });
+
+
+function pxRect(x,y,w,h,color){ ctx.fillStyle=color; ctx.fillRect(x|0,y|0,w|0,h|0); }
+function drawShip(){
+const x = ship.x|0, y = ship.y|0;
+// saucer base
+pxRect(x-14, y-4, 28, 8, '#cfd3da'); // hull
+pxRect(x-12, y+4, 24, 3, '#9aa7b5'); // belly shadow
+// windows
+pxRect(x-8, y-1, 4, 3, '#0af');
+pxRect(x-2, y-1, 4, 3, '#0af');
+pxRect(x+4, y-1, 4, 3, '#0af');
+// glass dome
+pxRect(x-6, y-9, 12, 6, '#e6fbff');
+if (ship.vy < 0){ pxRect(x-3, y+7, 6, 2, '#ffe066'); pxRect(x-2, y+9, 4, 2, '#ff9b3d'); }
 }
-projects.forEach(p=> grid.appendChild(cardTemplate(p)));
-count.textContent = projects.length;
-
-
-/* ---------- LIGHTBOX ---------- */
-const lb = document.getElementById('lightbox');
-const lbImg = document.getElementById('lbImg');
-const lbClose = document.getElementById('lbClose');
-const lbPrev = document.getElementById('lbPrev');
-const lbNext = document.getElementById('lbNext');
-let lbList = slides.slice();
-let lbIndex = 0;
-function openLB(src, list){ lbList = list || slides; lbIndex = lbList.indexOf(src); if (lbIndex < 0) lbIndex = 0; lbImg.src = lbList[lbIndex]; lb.classList.add('show'); lb.setAttribute('aria-hidden','false'); }
-function closeLB(){ lb.classList.remove('show'); lb.setAttribute('aria-hidden','true'); }
-function lbGo(delta){ lbIndex = (lbIndex + delta + lbList.length) % lbList.length; lbImg.src = lbList[lbIndex]; }
-lbClose.addEventListener('click', (e)=>{ e.stopPropagation(); closeLB(); });
-lb.addEventListener('click', (e)=>{ if(e.target === lb) closeLB(); });
-lbPrev.onclick = ()=>lbGo(-1);
-lbNext.onclick = ()=>lbGo(1);
-document.addEventListener('keydown', e=>{ if(!lb.classList.contains('show')) return; if(e.key==='Escape') closeLB(); if(e.key==='ArrowRight') lbGo(1); if(e.key==='ArrowLeft') lbGo(1*-1); });
-document.addEventListener('click', e=>{ const el = e.target.closest('[data-lightbox]'); if(!el) return; e.preventDefault(); const src = el.getAttribute('data-lightbox'); const gridImgs = [...document.querySelectorAll('#grid .thumb img')].map(i => i.getAttribute('data-lightbox')); const list = el.closest('#grid') ? gridImgs : slides; openLB(src, list); });
-
-
-/* ---------- SCROLL REVEAL ---------- */
-const ro = new IntersectionObserver(entries=>{ entries.forEach(el=>{ if(el.isIntersecting){ el.target.classList.add('show'); ro.unobserve(el.target); } }); }, {threshold:.08});
-document.querySelectorAll('.reveal').forEach(n=>ro.observe(n));
-
-
-/* ---------- THEME TOGGLE ---------- */
-const rootEl = document.documentElement;
-const toggle = document.getElementById('themeToggle');
-const toggle2 = document.getElementById('themeToggle2');
-function applyTheme(mode){ rootEl.setAttribute('data-theme', mode); localStorage.setItem('theme', mode); const label = mode === 'dark' ? '🌙 Dark' : '🌤️ Light'; if (toggle) toggle.textContent = label; if (toggle2) toggle2.textContent = label; }
-applyTheme(localStorage.getItem('theme') || 'dark');
-function flipTheme(){ applyTheme(rootEl.getAttribute('data-theme')==='dark'?'light':'dark'); }
-toggle?.addEventListener('click', flipTheme);
-toggle2?.addEventListener('click', flipTheme);
+function drawStars(){ ctx.fillStyle = '#000'; ctx.fillRect(0,0,960,540); ctx.fillStyle = '#fff'; for (const st of stars){ ctx.fillRect(st.x|0, st.y|0, st.s, st.s); st.x -= SPEED * (0.3 + st.s*0.1); if (st.x < -2){ st.x = 960 + Math.random()*60; st.y = Math.random()*540; } } }
+function drawPipe(p){ const x = p.x|0; const topH = p.top|0; const botY = (p.top + GAP)|0; const botH = (540 - botY)|0; for (let i=0;i<topH;i+=8){ ctx.fillStyle = i%16? '#b3b3b3':'#9a9a9a'; ctx.fillRect(x, i, 40, 8); } for (let j=botY;j<540;j+=8){ ctx.fillStyle = j%16? '#b3b3b3':'#9a9a9a'; ctx.fillRect(x, j, 40, 8); } ctx.fillStyle = '#ff3344'; ctx.fillRect(x-1, topH-1, 42, 2); ctx.fillRect(x-1, botY-1, 42, 2); }
+function collide(){ for (const p of pipes){ if (ship.x+ship.w/2 > p.x && ship.x-ship.w/2 < p.x+40){ if (ship.y-ship.h/2 < p.top || ship.y+ship.h/2 > p.top+GAP) return true; } } return (ship.y < 10 || ship.y > 530); }
+function update(){ ship.vy += G; ship.y += ship.vy; if (pipes.length === 0 || pipes[pipes.length-1].x < 960-260) spawnPipe(); for (const p of pipes){ p.x -= SPEED; } if (pipes[0] && pipes[0].x < -60) pipes.shift(); for (const p of pipes){ if (!p.passed && ship.x > p.x+40){ p.passed = true; score++; } }
+if (collide()){ running = false; best = Math.max(best, score); localStorage.setItem('mk_best', best); cover('Game Over',`Score: ${score} • Best: ${best}<br/>Press / Tap to retry`); started = false; } }
+function draw(){ drawStars(); for (const p of pipes) drawPipe(p); drawShip(); ctx.fillStyle = '#fff'; ctx.font = '16px "Press Start 2P", monospace'; ctx.textAlign = 'left'; ctx.fillText(`SCORE ${String(score).padStart(2,'0')}`, 16, 28); }
+function loop(){ if (running) update(); draw(); requestAnimationFrame(loop); }
+function cover(title, sub){ overlay.style.display='grid'; overlay.innerHTML = `<div class="cover"><div class="cover-title">${title}</div><div class="cover-sub">${sub}</div></div>`; }
+cover('MkhkAsg Adventure','Press / Tap to Start');
+loop();
+})();
